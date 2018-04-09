@@ -113,7 +113,11 @@ module.exports = class DvdStylerProject {
     const builder = new xml2js.Builder();
 
     // console.log(util.inspect(this.root.dvdstyler.vmgm[0].menus[0].pgc[0].vob[0].menu[0], false, null))
-    const xml = builder.buildObject(this.root);
+
+    const xml = builder.buildObject(this.root)
+      // @todo - this is hopefully unnecessary, but I wasn't able to figure out
+      // how to do this properly with xml2js
+      .replace(/&lt;tbreak\/&gt;/gi, global.NEWLINE);
 
     return new Promise((resolve, reject) => {
       fs.writeFile(pathToFile, xml, (error) => {
