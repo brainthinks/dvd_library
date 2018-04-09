@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = class Title {
+const MenuAssets = require('./MenuAssets');
+
+module.exports = class Title extends MenuAssets {
   static fromIndex (index, title) {
     return Title.factory(`menu_${index}_title`, title);
   }
@@ -10,18 +12,20 @@ module.exports = class Title {
   }
 
   constructor (id, title) {
-    this.id = id;
-    this.s_id = `s_${this.id}`;
-    this.href = `#${this.s_id}`;
+    super(id);
+
     this.title = title;
 
-    this.svgDef = this.generateSvgDef();
-    this.svgGObject = this.generateSvgGObject();
-    this.object = this.generateObject();
+    this.s_id = `s_${this.id}`;
+    this.href = `#${this.s_id}`;
+
+    this.generateSvgDef();
+    this.generateGObjectUses();
+    this.generateObject();
   }
 
   generateSvgDef () {
-    return {
+    this.svgs.push({
       $: { id: this.s_id },
       defs: [{
         filter: [{
@@ -66,11 +70,11 @@ module.exports = class Title {
           _: this.title,
         }],
       }],
-    };
+    });
   }
 
-  generateSvgGObject () {
-    return {
+  generateGObjectUses () {
+    this.gObjectUses.push({
       $: {
         x: '104',
         y: '32',
@@ -79,13 +83,13 @@ module.exports = class Title {
         id: this.id,
         'xlink:href': this.href,
       },
-    };
+    });
   }
 
   generateObject () {
-    return {
+    this.objects.push({
       $: { id: this.id },
       filename: [{ _: 'text-v2.xml' }],
-    };
+    });
   }
 };

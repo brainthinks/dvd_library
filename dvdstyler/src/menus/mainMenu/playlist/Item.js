@@ -155,7 +155,8 @@ module.exports = class Item {
       action: [{
         $: {
           tsi: 0,
-          pgci: this.index,
+          // Not sure why this is the way to access the titles...
+          pgci: (this.index * 2) + 1,
         },
       }],
       // @todo

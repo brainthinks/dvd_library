@@ -4,4 +4,7 @@ This is still a work in progress.  I plan on using a source dvdstyler template a
 
 ## @todo
 
-*
+* figure out how to pass raw xml through xmljs
+* implement ability to set directions on buttons - Sidebar, LanguageOptionSelector, ReturnButton, Item
+* add configuration option for video quality
+* create a test ISO!

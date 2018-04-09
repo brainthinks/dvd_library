@@ -2,9 +2,11 @@
 
 const fs = require('fs');
 const xml2js = require('xml2js');
-const util = require('util');
+// const util = require('util');
 
-const Menus = require('./Menus');
+const MainMenu = require('./menus/mainMenu/');
+const LanguageOptionsMenu = require('./menus/languageOptionsMenu/');
+const Titleset = require('./titleset/Titleset');
 
 module.exports = class DvdStylerProject {
   static async fromFile (pathToFile, options) {
@@ -77,15 +79,34 @@ module.exports = class DvdStylerProject {
     this.videos = videos;
     this.isAvailableImage = isAvailableImage;
 
-    this.menus = Menus.factory();
-
-    this.menus.createFromPgcs(
-      this.root.dvdstyler.vmgm[0].menus[0].pgc,
-      this.title,
-      this.logo,
-      this.videos,
-      this.isAvailableImage,
+    this.mainMenu = MainMenu.fromVobMenu(
+      this.root.dvdstyler.vmgm[0].menus[0].pgc[0].vob[0].menu[0],
+      0,
+      title,
+      logo,
+      videos,
+      isAvailableImage,
     );
+
+    this.languageOptionsMenu = LanguageOptionsMenu.fromVobMenu(
+      this.root.dvdstyler.vmgm[0].menus[0].pgc[1].vob[0].menu[0],
+      1,
+      title,
+      logo,
+      videos,
+      isAvailableImage,
+    );
+
+    this.titleset = Titleset.factory(this.videos);
+
+    // Mutate the root
+
+    this.root.dvdstyler.vmgm[0].menus[0].pgc = [
+      this.mainMenu.pgc,
+      this.languageOptionsMenu.pgc,
+    ];
+
+    this.root.dvdstyler.titleset[0] = this.titleset.titleset;
   }
 
   toFile (pathToFile) {
