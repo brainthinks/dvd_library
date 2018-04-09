@@ -1,11 +1,17 @@
 'use strict';
 
+const debug = require('debug')('dvdstyler:LanguageAvailable');
+
 module.exports = class LanguageAvailable {
   static factory (id, image, leftMargin, topMargin) {
+    debug(`factory - ${id}, ${image}, ${leftMargin}, ${topMargin}`);
+
     return new LanguageAvailable(id, image, leftMargin, topMargin);
   }
 
   constructor (id, image, leftMargin, topMargin) {
+    debug(`constructor - ${id}, ${image}, ${leftMargin}, ${topMargin}`);
+
     if (!id) {
       throw new Error('LanguageAvailable needs an id.');
     }
@@ -25,7 +31,7 @@ module.exports = class LanguageAvailable {
 
     this.image = image;
     this.size = 24;
-    this.leftMargin = leftMargin;
+    this.leftMargin = leftMargin + 3;
     this.topMargin = topMargin;
 
     this.svg = this.generateSvg();

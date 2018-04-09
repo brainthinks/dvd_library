@@ -100,8 +100,6 @@ module.exports = class Menu {
     this.sidebar = Sidebar.fromIndex(index, logo);
     this.content = Playlist.factory(videos, isAvailableImage);
 
-    // console.log(this.content)
-
     this.menu.svg[0].defs = Menu.generateSvgDefs(this.title, this.sidebar, this.content);
     this.menu.svg[0].g = Menu.generateSvgG(this.title, this.sidebar, this.content);
     this.menu.object = Menu.generateObjects(this.title, this.sidebar, this.content);

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "generate": "./src/index.js",
+    "generate": "DEBUG=* ./src/index.js",
     "lint": "eslint ./ --cache --quiet",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/brainthinks/dvd_library/dvdstyler#readme",
   "dependencies": {
+    "debug": "^3.1.0",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {

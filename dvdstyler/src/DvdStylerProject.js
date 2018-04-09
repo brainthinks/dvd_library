@@ -31,7 +31,18 @@ module.exports = class DvdStylerProject {
     return new DvdStylerProject(xml, options);
   }
 
-  constructor (root, { clientName, year, name, title, logo, videos, isAvailableImage }) {
+  constructor (
+    root,
+    {
+      clientName,
+      year,
+      name,
+      title,
+      logo,
+      videos,
+      isAvailableImage,
+    } = {}
+  ) {
     if (!root) {
       throw new Error('DvdStylerProject needs a root.');
     }

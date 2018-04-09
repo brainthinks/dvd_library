@@ -1,28 +1,12 @@
 'use strict';
 
+const debug = require('debug')('dvdstyler:Item');
+
 const LanguageAvailable = require('./LanguageAvailable');
 
 module.exports = class Item {
-  static factory (
-    video,
-    index,
-    {
-      isAvailableImage,
-      leftMargin = 200,
-      topMargin = 96,
-      availabilityLeftMargin = 600,
-      availabilityTopMargin = 40,
-      spaceBetween = 28,
-    } = {}
-  ) {
-    const options = {
-      isAvailableImage,
-      leftMargin,
-      topMargin,
-      availabilityLeftMargin,
-      availabilityTopMargin,
-      spaceBetween,
-    };
+  static factory (video, index, options) {
+    debug(`factory - ${video}, ${index}, ${options}`);
 
     return new Item(video, index, options);
   }
@@ -31,22 +15,22 @@ module.exports = class Item {
     video,
     index,
     {
-      isAvailableImage,
+      spaceBetween,
       leftMargin,
       topMargin,
-      availabilityLeftMargin,
-      availabilityTopMargin,
-      spaceBetween,
+      languageOptions,
     } = {}
   ) {
+    debug(`constructor - ${video}, ${index}, ${spaceBetween}, ${leftMargin}, ${topMargin}, ${languageOptions}`);
+
     if (!video) {
       throw new Error('Item needs a video definition.');
     }
     if (!index && index !== 0) {
       throw new Error('Item needs an index so it knows what position in the list it is in.');
     }
-    if (!isAvailableImage) {
-      throw new Error('Item needs an image to use when a language is available.');
+    if (!spaceBetween) {
+      throw new Error('Item needs to know how much space it needs to put between itself and the previous item.');
     }
     if (!leftMargin) {
       throw new Error('Item needs a left margin.');
@@ -54,14 +38,14 @@ module.exports = class Item {
     if (!topMargin) {
       throw new Error('Item needs a topMargin.');
     }
-    if (!availabilityLeftMargin) {
-      throw new Error('Item needs an availabilityLeftMargin.');
+    if (!languageOptions.isAvailableImage) {
+      throw new Error('Item needs languageOptions.isAvailableImage.');
     }
-    if (!availabilityTopMargin) {
-      throw new Error('Item needs an availabilityTopMargin.');
+    if (!languageOptions.leftMargin) {
+      throw new Error('Item needs languageOptions.leftMargin.');
     }
-    if (!spaceBetween) {
-      throw new Error('Item needs to know how much space it needs to put between itself and the previous item.');
+    if (!languageOptions.spaceBetween) {
+      throw new Error('Item needs languageOptions.spaceBetween.');
     }
 
     this.config = video;
@@ -73,9 +57,10 @@ module.exports = class Item {
 
     this.width = 382;
     this.height = 17;
-    this.leftMargin = leftMargin;
-    this.topMargin = topMargin;
     this.spaceBetween = spaceBetween;
+    this.leftMargin = leftMargin;
+    this.topMargin = topMargin + (this.spaceBetween * this.index);
+    this.languageOptions = languageOptions;
 
     this.svg = this.generateSvg();
     this.gUse = this.generateGUse();
@@ -84,23 +69,20 @@ module.exports = class Item {
     this.english = this.config.audio.english
       ? LanguageAvailable.factory(
         `${this.id}_en_available`,
-        isAvailableImage,
-        availabilityLeftMargin,
-        availabilityTopMargin + (this.spaceBetween * index),
+        this.languageOptions.isAvailableImage,
+        this.languageOptions.leftMargin,
+        this.topMargin,
       )
       : undefined;
 
     this.spanish = this.config.audio.spanish
       ? LanguageAvailable.factory(
         `${this.id}_sp_available`,
-        isAvailableImage,
-        availabilityLeftMargin + 40,
-        availabilityTopMargin + (this.spaceBetween * index),
+        this.languageOptions.isAvailableImage,
+        this.languageOptions.leftMargin + this.languageOptions.spaceBetween,
+        this.topMargin,
       )
       : undefined;
-
-    console.log(this.english)
-    console.log(this.spanish)
   }
 
   generateSvg () {
@@ -154,11 +136,10 @@ module.exports = class Item {
   }
 
   generateGUse () {
-    console.log('this.leftMargin', this.leftMargin)
     return {
       $: {
         x: this.leftMargin,
-        y: this.topMargin + (this.spaceBetween * this.index),
+        y: this.topMargin,
         width: this.width,
         height: this.height,
         id: this.buttonId,

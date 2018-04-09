@@ -3,20 +3,40 @@
 const Item = require('./Item');
 
 module.exports = class Items {
-  static factory (videos, isAvailableImage) {
-    return new Items(videos, isAvailableImage);
+  static factory (videos, options) {
+    return new Items(videos, options);
   }
 
-  constructor (videos, isAvailableImage) {
+  constructor (
+    videos,
+    {
+      spaceBetween,
+      leftMargin,
+      topMargin,
+      languageOptions,
+    } = {}
+  ) {
     if (!videos) {
       throw new Error('Items needs videos.');
     }
-    if (!isAvailableImage) {
-      throw new Error('Items needs isAvailableImage.');
+    if (!spaceBetween) {
+      throw new Error('Items needs spaceBetween');
+    }
+    if (!leftMargin) {
+      throw new Error('Items needs leftMargin');
+    }
+    if (!topMargin) {
+      throw new Error('Items needs topMargin');
+    }
+    if (!languageOptions) {
+      throw new Error('Items needs languageOptions');
     }
 
     this.items = [];
-    this.isAvailableImage = isAvailableImage;
+    this.spaceBetween = spaceBetween;
+    this.leftMargin = leftMargin;
+    this.topMargin = topMargin;
+    this.languageOptions = languageOptions;
 
     this.addItems(videos);
   }
@@ -25,9 +45,16 @@ module.exports = class Items {
     const numVideos = videos.length;
 
     for (let i = 0; i < numVideos; i++) {
-      this.items.push(Item.factory(videos[i], i, {
-        isAvailableImage: this.isAvailableImage,
-      }));
+      this.items.push(Item.factory(
+        videos[i],
+        i,
+        {
+          spaceBetween: this.spaceBetween,
+          leftMargin: this.leftMargin,
+          topMargin: this.topMargin,
+          languageOptions: this.languageOptions,
+        }
+      ));
     }
   }
 
@@ -75,9 +102,9 @@ module.exports = class Items {
         gObjectUses.push(item.gUse);
       }
 
-      // if (item.english) {
-      //   gObjectUses.push(item.english.gUse);
-      // }
+      if (item.english) {
+        gObjectUses.push(item.english.gUse);
+      }
 
       if (item.spanish) {
         gObjectUses.push(item.spanish.gUse);

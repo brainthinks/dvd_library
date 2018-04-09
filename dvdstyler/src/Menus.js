@@ -35,7 +35,14 @@ module.exports = class Menus {
       throw new Error('An image to indicate language availability is required to construct a menu.');
     }
 
-    const menu = Menu.fromVobMenu(pgc.vob[0].menu[0], index, title, logo, videos, isAvailableImage);
+    const menu = Menu.fromVobMenu(
+      pgc.vob[0].menu[0],
+      index,
+      title,
+      logo,
+      videos,
+      isAvailableImage,
+    );
 
     this.menus.push(menu);
   }
@@ -44,7 +51,14 @@ module.exports = class Menus {
     const numPgcs = pgcs.length;
 
     for (let i = 0; i < numPgcs; i++) {
-      this.createFromPgc(pgcs[i], i, title, logo, videos, isAvailableImage);
+      this.createFromPgc(
+        pgcs[i],
+        i,
+        title,
+        logo,
+        videos,
+        isAvailableImage,
+      );
     }
   }
 };

@@ -27,20 +27,32 @@ module.exports = class Playlist {
     this.englishHeader = LanguageHeader.factory(
       'english_availability_header',
       'EN',
-      this.columnWidths.title + this.columnWidths.language,
+      this.columnWidths.title,
       this.topMargin
     );
 
     this.spanishHeader = LanguageHeader.factory(
       'spanish_availability_header',
       'SP',
-      (this.columnWidths.title + (this.columnWidths.language * 2)),
+      (this.columnWidths.title + this.columnWidths.language),
       this.topMargin
     );
 
-    this.items = Items.factory(videos, isAvailableImage);
-
-    console.log(this.items.getObjects())
+    this.items = Items.factory(
+      videos,
+      {
+        spaceBetween: 28,
+        // @todo - this should come from the Sidebar
+        leftMargin: 200,
+        // @todo - this should come from the Title
+        topMargin: 96,
+        languageOptions: {
+          isAvailableImage,
+          leftMargin: this.columnWidths.title,
+          spaceBetween: this.columnWidths.language,
+        },
+      },
+    );
 
     this.svgs = [
       this.englishHeader.svg,
