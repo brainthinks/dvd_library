@@ -21,13 +21,14 @@ module.exports = class Sidebar {
     const playAllButtonDefinition = {
       name: 'playAll',
       title: 'Play All',
-      yPosition: '336',
+      yPosition: '315',
       action: {
         tsi: '0',
         pgci: '1',
         playAll: 'true',
         playAllTitlesets: 'true',
       },
+      // @todo
       direction: {
         left: 'button01',
         right: 'button03',
@@ -39,10 +40,11 @@ module.exports = class Sidebar {
     const languageOptionsButtonDefinition = {
       name: 'languageOptions',
       title: `Language${global.NEWLINE}Options`,
-      yPosition: '408',
+      yPosition: '400',
       action: {
         pgci: '2',
       },
+      // @todo
       direction: {
         left: 'button02',
         right: 'button03',
@@ -72,9 +74,7 @@ module.exports = class Sidebar {
           defs: [{
             filter: [{
               $: { id: 'shadowFilter' },
-              feGaussianBlur: [{
-                $: { stdDeviation: 3 },
-              }],
+              feGaussianBlur: [{ $: { stdDeviation: 3 } }],
             }],
           }],
           image: [{
@@ -183,8 +183,8 @@ module.exports = class Sidebar {
         },
         button: {
           $: { id: button_id },
-          action: [action],
-          direction: [direction],
+          action: [{ $: action }],
+          direction: [{ $: direction }],
           filename: [{ _: 'text-v3.xml' }],
           parameter: [{
             $: {
