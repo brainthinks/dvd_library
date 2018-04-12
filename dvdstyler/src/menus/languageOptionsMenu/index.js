@@ -53,6 +53,27 @@ module.exports = class LanguageOptionsMenu extends Menu {
       height: 17,
     });
 
+    spanishSelector.setButtonDirection(0, {
+      left: 'none',
+      right: 'none',
+      up: returnButton.buttonId,
+      down: englishSelector.buttonId,
+    });
+
+    englishSelector.setButtonDirection(0, {
+      left: 'none',
+      right: 'none',
+      up: spanishSelector.buttonId,
+      down: returnButton.buttonId,
+    });
+
+    returnButton.setButtonDirection(0, {
+      left: 'none',
+      right: 'none',
+      up: englishSelector.buttonId,
+      down: spanishSelector.buttonId,
+    });
+
     this.addMenuAssets(
       menuTitle,
       sidebar,

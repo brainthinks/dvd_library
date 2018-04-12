@@ -43,29 +43,28 @@ module.exports = class Items {
       leftMargin,
       topMargin,
       languageOptions,
+      playAllButtonId,
     } = {}
   ) {
-    if (!videos) {
+    if (!videos)
       throw new Error('Items needs videos.');
-    }
-    if (!spaceBetween) {
+    if (!spaceBetween)
       throw new Error('Items needs spaceBetween');
-    }
-    if (!leftMargin) {
+    if (!leftMargin)
       throw new Error('Items needs leftMargin');
-    }
-    if (!topMargin) {
+    if (!topMargin)
       throw new Error('Items needs topMargin');
-    }
-    if (!languageOptions) {
+    if (!languageOptions)
       throw new Error('Items needs languageOptions');
-    }
+    if (!playAllButtonId)
+      throw new Error('Items needs playAllButtonId');
 
     this.items = [];
     this.spaceBetween = spaceBetween;
     this.leftMargin = leftMargin;
     this.topMargin = topMargin;
     this.languageOptions = languageOptions;
+    this.playAllButtonId = playAllButtonId;
 
     this.addItems(videos);
   }
@@ -88,6 +87,23 @@ module.exports = class Items {
         }
       ));
     }
+
+    this.forEach((item, index) => {
+      const nextButtonId = this.items[index + 1]
+        ? this.items[index + 1].buttonId
+        : this.items[0].buttonId;
+
+      const previousButtonId = index === 0
+        ? this.items[this.items.length - 1].buttonId
+        : this.items[index - 1].buttonId;
+
+      item.setButtonDirection({
+        left: this.playAllButtonId,
+        right: 'none',
+        up: previousButtonId,
+        down: nextButtonId,
+      });
+    });
   }
 
   forEach (func) {

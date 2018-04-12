@@ -1,6 +1,7 @@
 'use strict';
 
 const MenuAssets = require('./MenuAssets');
+const Style = require('~/Style');
 
 module.exports = class Sidebar extends MenuAssets {
   static fromIndex (index, logo) {
@@ -16,15 +17,15 @@ module.exports = class Sidebar extends MenuAssets {
 
     this.logoImage = logo;
 
-    this.leftMargin = '50';
-    this.width = '150';
-    this.buttonHeight = '75';
+    this.leftMargin = 50;
+    this.width = 150;
+    this.buttonHeight = 75;
   }
 
   generateLogo () {
     this.logo = this._generateLogo({
-      topMargin: '64',
-      height: '242',
+      topMargin: 64,
+      height: 242,
       logo: this.logoImage,
     });
 
@@ -32,22 +33,15 @@ module.exports = class Sidebar extends MenuAssets {
   }
 
   generatePlayAllButton () {
-    this.playAllButton = this._generateButton({
+    this._generateButton({
       name: 'playAll',
       title: 'Play All',
-      topMargin: '315',
+      topMargin: 315,
       action: {
-        tsi: '0',
-        pgci: '1',
+        tsi: 0,
+        pgci: 1,
         playAll: 'true',
         playAllTitlesets: 'true',
-      },
-      // @todo
-      direction: {
-        left: 'button01',
-        right: 'button03',
-        up: 'button02',
-        down: 'button02',
       },
     });
 
@@ -55,19 +49,12 @@ module.exports = class Sidebar extends MenuAssets {
   }
 
   generateLanguageOptionsButton () {
-    this.languageOptionsButton = this._generateButton({
+    this._generateButton({
       name: 'languageOptions',
       title: `Language${global.NEWLINE}Options`,
-      topMargin: '400',
+      topMargin: 400,
       action: {
-        pgci: '2',
-      },
-      // @todo
-      direction: {
-        left: 'button02',
-        right: 'button03',
-        up: 'button01',
-        down: 'button01',
+        pgci: 2,
       },
     });
 
@@ -88,7 +75,7 @@ module.exports = class Sidebar extends MenuAssets {
           preserveAspectRatio: 'none',
           id: 'image',
           'xlink:href': logo,
-          style: 'opacity:1;',
+          style: Style.factory({ opacity: 1 }).toXmlString(),
         },
       }],
     });
@@ -114,7 +101,7 @@ module.exports = class Sidebar extends MenuAssets {
     });
   }
 
-  _generateButton ({ name, title, topMargin, action, direction }) {
+  _generateButton ({ name, title, topMargin, action }) {
     const container_id = `${this.id}_${name}_container`;
     const container_s_id = `s_${container_id}`;
     const container_href = `#${container_s_id}`;
@@ -138,29 +125,40 @@ module.exports = class Sidebar extends MenuAssets {
           height: '100%',
           preserveAspectRatio: 'xmidymid slice',
           id: 'image',
-          style: 'opacity:1;',
+          style: Style.factory({ opacity: 1 }).toXmlString(),
         },
       }],
       use: [{
         $: {
           id: 'shadow',
           'xlink:href': '#rect',
-          style: 'fill:none;filter:url(#shadowFilter);stroke:#404040;stroke-opacity:1;visibility:visible;',
+          style: Style.factory({
+            fill: 'none',
+            filter: 'url(#shadowFilter)',
+            stroke: '#404040',
+            'stroke-opacity': 1,
+            visibility: 'visible',
+          }).toXmlString(),
         },
       }],
       g: [{
         $: {
           id: 'main',
-          style: 'fill:#000000;fill-opacity:1;stroke:#768c9c;stroke-opacity:1;',
+          style: Style.factory({
+            fill: '#000000',
+            'fill-opacity': 1,
+            stroke: '#768c9c',
+            'stroke-opacity': 1,
+          }).toXmlString(),
         },
         rect: [{
           $: {
             width: '100%',
             height: '100%',
-            rx: '0',
-            ry: '0',
+            rx: 0,
+            ry: 0,
             id: 'rect',
-            style: 'stroke-width:5;',
+            style: Style.factory({ 'stroke-width': 5 }).toXmlString(),
           },
         }],
       }],
@@ -191,30 +189,38 @@ module.exports = class Sidebar extends MenuAssets {
       defs: [{
         filter: [{
           $: { id: 'shadowFilter' },
-          feGaussianBlur: { stdDeviation: '3' },
+          feGaussianBlur: { stdDeviation: 3 },
         }],
       }],
       rect: [{
         $: {
           width: '100%',
           height: '100%',
-          rx: '5',
-          ry: '5',
+          rx: 5,
+          ry: 5,
           id: 'background',
-          style: 'fill:none;fill-opacity:1;',
+          style: Style.factory({
+            file: 'none',
+            'fill-opacity': 1,
+          }).toXmlString(),
         },
       }],
       use: [{
         $: {
           id: 'shadow',
           'xlink:href': '#text',
-          style: 'fill:#404040;fill-opacity:1;filter:url(#shadowFilter);visibility:hidden;',
+          style: Style.factory({
+            fill: '#404040',
+            'fill-opacity': 1,
+            filter: 'url(#shadowFilter)',
+            visibility: 'hidden',
+          }).toXmlString(),
         },
       }],
       g: [{
         $: {
           id: 'gText',
-          style: 'fill:#ffffff;',
+          style: Style.factory({ fill: '#ffffff' }).toXmlString(),
         },
         text: [{
           $: {
@@ -222,7 +228,14 @@ module.exports = class Sidebar extends MenuAssets {
             y: '50%',
             id: 'text',
             'xml:space': 'preserve',
-            style: 'dominant-baseline:middle;font-family:Sans;font-size:20;font-style:normal;font-weight:normal;text-anchor:middle;',
+            style: Style.factory({
+              'dominant-baseline': 'middle',
+              'font-family': 'Sans',
+              'font-size': 20,
+              'font-style': 'normal',
+              'font-weight': 'normal',
+              'text-anchor': 'middle',
+            }).toXmlString(),
           },
           _: title,
         }],
@@ -243,7 +256,7 @@ module.exports = class Sidebar extends MenuAssets {
     this.buttons.push({
       $: { id: button_id },
       action: [{ $: action }],
-      direction: [{ $: direction }],
+      direction: [{ $: {} }],
       filename: [{ _: 'text-v3.xml' }],
       parameter: [{
         $: {

@@ -201,4 +201,26 @@ module.exports = class Item {
       }],
     };
   }
+
+  setButtonDirection ({ left, right, up, down }) {
+    if (!left) {
+      throw new Error('You must supply left when setting button direction.');
+    }
+    if (!right) {
+      throw new Error('You must supply right when setting button direction.');
+    }
+    if (!up) {
+      throw new Error('You must supply up when setting button direction.');
+    }
+    if (!down) {
+      throw new Error('You must supply down when setting button direction.');
+    }
+
+    this.button.direction[0].$ = {
+      left,
+      right,
+      up,
+      down,
+    };
+  }
 };

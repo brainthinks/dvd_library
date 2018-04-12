@@ -1,5 +1,7 @@
 'use strict';
 
+const Style = require('~/Style');
+
 module.exports = class MainMenu {
   static fromVobMenu (menu, index, title, logo, videos, isAvailableImage) {
     throw new Error('Abstract static method "fromVobMenu" not yet implemented...');
@@ -10,24 +12,18 @@ module.exports = class MainMenu {
   }
 
   constructor (menu, index, title, logo, videos, isAvailableImage) {
-    if (!menu) {
+    if (!menu)
       throw new Error('MainMenu needs a menu definition.');
-    }
-    if (!index && index !== 0) {
+    if (!index && index !== 0)
       throw new Error('MainMenu needs an index.');
-    }
-    if (!title) {
+    if (!title)
       throw new Error('MainMenu needs a title.');
-    }
-    if (!logo) {
+    if (!logo)
       throw new Error('MainMenu needs a logo.');
-    }
-    if (!videos) {
+    if (!videos)
       throw new Error('MainMenu needs video definitions.');
-    }
-    if (!isAvailableImage) {
+    if (!isAvailableImage)
       throw new Error('MainMenu needs isAvailableImage.');
-    }
 
     this.svgs = [];
     this.gObjectUses = [];
@@ -71,7 +67,7 @@ module.exports = class MainMenu {
                 width: 720,
                 height: 540,
                 id: 'backgroundColour',
-                style: 'fill:#444444;',
+                style: Style.factory({ fill: '#444444' }).toXmlString(),
               },
             }],
             defs: [{

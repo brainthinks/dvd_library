@@ -4,17 +4,17 @@ const LanguageHeader = require('./LanguageHeader');
 const Items = require('./Items');
 
 module.exports = class Playlist {
-  static factory (videos, isAvailableImage) {
-    return new Playlist(videos, isAvailableImage);
+  static factory (videos, isAvailableImage, playAllButtonId) {
+    return new Playlist(videos, isAvailableImage, playAllButtonId);
   }
 
-  constructor (videos, isAvailableImage) {
-    if (!videos) {
+  constructor (videos, isAvailableImage, playAllButtonId) {
+    if (!videos)
       throw new Error('Playlist needs a video definitions.');
-    }
-    if (!isAvailableImage) {
+    if (!isAvailableImage)
       throw new Error('Playlist needs isAvailableImage.');
-    }
+    if (!playAllButtonId)
+      throw new Error('Playlist needs playAllButtonId.');
 
     this.columnWidths = {
       title: 600,
@@ -51,6 +51,7 @@ module.exports = class Playlist {
           leftMargin: this.columnWidths.title,
           spaceBetween: this.columnWidths.language,
         },
+        playAllButtonId,
       },
     );
 

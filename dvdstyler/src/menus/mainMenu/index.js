@@ -27,7 +27,26 @@ module.exports = class MainMenu extends Menu {
       .generatePlayAllButton()
       .generateLanguageOptionsButton();
 
-    const playlist = Playlist.factory(videos, isAvailableImage);
+    const playAllButtonId = sidebar.buttons[0].$.id;
+    const languageOptionsButtonId = sidebar.buttons[1].$.id;
+
+    const playlist = Playlist.factory(videos, isAvailableImage, playAllButtonId);
+
+    const playlistFirstItemId = playlist.items.items[0].button.$.id;
+
+    sidebar.setButtonDirection(0, {
+      left: 'none',
+      right: playlistFirstItemId,
+      up: languageOptionsButtonId,
+      down: languageOptionsButtonId,
+    });
+
+    sidebar.setButtonDirection(1, {
+      left: 'none',
+      right: playlistFirstItemId,
+      up: playAllButtonId,
+      down: playAllButtonId,
+    });
 
     this.addMenuAssets(
       menuTitle,

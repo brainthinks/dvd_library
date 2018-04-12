@@ -3,6 +3,7 @@
 const debug = require('debug')('dvdstyler:ReturnButton');
 
 const MenuAssets = require('../MenuAssets');
+const Style = require('~/Style');
 
 module.exports = class ReturnButton extends MenuAssets {
   static factory (id, options) {
@@ -64,7 +65,9 @@ module.exports = class ReturnButton extends MenuAssets {
           x: 10,
           y: '50%',
           id: 'square',
-          style: 'fill:none;',
+          style: Style.factory({
+            fill: 'none',
+          }).toXmlString(),
           transform: 'translate(0,-5)',
         },
       }],
@@ -74,13 +77,21 @@ module.exports = class ReturnButton extends MenuAssets {
           y: 2,
           id: 'shadow',
           'xlink:href': '#text',
-          style: 'fill:#404040;fill-opacity:1;filter:url(#shadowFilter);visibility:visible;',
+          style: Style.factory({
+            fill: '#404040',
+            'fill-opacity': 1,
+            filter: 'url(#shadowFilter)',
+            visibility: 'visible',
+          }).toXmlString(),
         },
       }],
       g: [{
         $: {
           id: 'gText',
-          style: 'fill:#ffffff;fill-opacity:1;',
+          style: Style.factory({
+            fill: '#ffffff',
+            'fill-opacity': 1,
+          }).toXmlString(),
         },
         text: [{
           $: {
@@ -88,7 +99,14 @@ module.exports = class ReturnButton extends MenuAssets {
             y: '50%',
             id: 'text',
             'xml:space': 'preserve',
-            style: 'dominant-baseline:middle;font-family:Liberation Serif;font-size:18;font-style:italic;font-weight:normal;text-anchor:;',
+            style: Style.factory({
+              'dominant-baseline': 'middle',
+              'font-family': 'Liberation Serif',
+              'font-size': 18,
+              'font-style': 'italic',
+              'font-weight': 'normal',
+              'text-anchor': '',
+            }).toXmlString(),
           },
           _: this.text,
         }],
@@ -113,15 +131,7 @@ module.exports = class ReturnButton extends MenuAssets {
     this.buttons.push({
       $: { id: this.buttonId },
       action: [{ $: { pgci: this.action } }],
-      // @todo
-      direction: [{
-        $: {
-          left: this.buttonId,
-          right: this.buttonId,
-          up: this.buttonId, // should point to spanish
-          down: this.buttonId, // should point to english
-        },
-      }],
+      direction: [{ $: {} }],
       filename: [{ _: 'text-square-v2.xml' }],
       parameter: [{
         $: {

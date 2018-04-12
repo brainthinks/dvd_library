@@ -2,6 +2,8 @@
 
 const debug = require('debug')('dvdstyler:LanguageAvailable');
 
+const Style = require('~/Style');
+
 module.exports = class LanguageAvailable {
   static factory (id, image, leftMargin, topMargin) {
     debug(`factory - ${id}, ${image}, ${leftMargin}, ${topMargin}`);
@@ -51,7 +53,7 @@ module.exports = class LanguageAvailable {
           preserveAspectRatio: 'none',
           id: 'image',
           'xlink:href': this.image,
-          style: 'opacity:1;',
+          style: Style.factory({ opacity: 1 }).toXmlString(),
         },
       }],
     };
