@@ -1,12 +1,18 @@
 'use strict';
 
 module.exports = class Title {
-  static factory (config) {
-    return new Title(config);
+  static factory (config, quality) {
+    return new Title(config, quality);
   }
 
-  constructor (config) {
+  constructor (config, quality) {
+    if (!config)
+      throw new Error('Titleset Title requires config');
+    if (!quality)
+      throw new Error('Titleset Title requires quality');
+
     this.config = config;
+    this.quality = quality;
 
     this.generatePgc();
   }
@@ -15,7 +21,7 @@ module.exports = class Title {
     this.pgc = {
       vob: [{
         $: {
-          file: this.config.video.elq,
+          file: this.config.video[this.quality],
           chapters: this.config.chapters.join(','),
         },
         video: [{ $: { format: 1 } }],

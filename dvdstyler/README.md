@@ -4,5 +4,4 @@ This is still a work in progress.  I plan on using a source dvdstyler template a
 
 ## @todo
 
-* add configuration option for video quality
-* create a test ISO!
+* Test it!!!

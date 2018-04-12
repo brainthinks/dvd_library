@@ -42,6 +42,7 @@ module.exports = class DvdStylerProject {
       title,
       logo,
       videos,
+      quality,
       isAvailableImage,
     } = {}
   ) {
@@ -66,6 +67,9 @@ module.exports = class DvdStylerProject {
     if (!videos) {
       throw new Error('DvdStylerProject needs videos.');
     }
+    if (!quality) {
+      throw new Error('DvdStylerProject needs quality.');
+    }
     if (!isAvailableImage) {
       throw new Error('DvdStylerProject needs an isAvailableImage.');
     }
@@ -77,6 +81,7 @@ module.exports = class DvdStylerProject {
     this.title = title;
     this.logo = logo;
     this.videos = videos;
+    this.quality = quality;
     this.isAvailableImage = isAvailableImage;
 
     this.mainMenu = MainMenu.fromVobMenu(
@@ -97,7 +102,7 @@ module.exports = class DvdStylerProject {
       isAvailableImage,
     );
 
-    this.titleset = Titleset.factory(this.videos);
+    this.titleset = Titleset.factory(this.videos, this.quality);
 
     // Mutate the root
 

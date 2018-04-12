@@ -10,9 +10,9 @@ module.exports = {
   // The year of dvd or content production
   year: 2018,
   // The name that is used to identify the disk
-  diskName: '',
+  name: '',
   // The title that will appear at the top of the menus
-  diskTitle: '',
+  title: '',
   // The logo image to be used in the menus
   logo: '',
   //
@@ -29,4 +29,6 @@ module.exports = {
       },
     },
   }],
+  //
+  quality: '',
 };

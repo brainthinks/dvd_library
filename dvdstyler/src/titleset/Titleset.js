@@ -3,12 +3,18 @@
 const Title = require('./Title');
 
 module.exports = class Titleset {
-  static factory (configs) {
-    return new Titleset(configs);
+  static factory (configs, quality) {
+    return new Titleset(configs, quality);
   }
 
-  constructor (configs) {
+  constructor (configs, quality) {
+    if (!configs)
+      throw new Error('Titleset requires configs');
+    if (!quality)
+      throw new Error('Titleset requires quality');
+
     this.configs = configs;
+    this.quality = quality;
 
     this.generateTitleset();
   }
@@ -30,7 +36,7 @@ module.exports = class Titleset {
           { $: { lang: 'EN' } },
           { $: { lang: 'ES' } },
         ],
-        pgc: this.configs.map((config) => Title.factory(config).pgc),
+        pgc: this.configs.map((config) => Title.factory(config, this.quality).pgc),
       }],
     };
   }
