@@ -2,6 +2,8 @@
 
 'use strict';
 
+require('module-alias/register');
+
 // NOTE - you must provide this yourself!
 const config = require('../config');
 

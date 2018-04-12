@@ -7,6 +7,35 @@ module.exports = class Items {
     return new Items(videos, options);
   }
 
+  static determineTitleFontSize (videos) {
+    let smallestTitleFontSize = 18;
+
+    const numVideos = videos.length;
+
+    for (let i = 0; i < numVideos; i++) {
+      const video = videos[i];
+      let titleFontSize = 18;
+
+      if (video.title.length > 45) {
+        titleFontSize = 16;
+      }
+
+      if (video.title.length > 55) {
+        titleFontSize = 14;
+      }
+
+      if (video.title.length > 60) {
+        titleFontSize = 13;
+      }
+
+      if (titleFontSize < smallestTitleFontSize) {
+        smallestTitleFontSize = titleFontSize;
+      }
+    }
+
+    return smallestTitleFontSize;
+  }
+
   constructor (
     videos,
     {
@@ -44,11 +73,14 @@ module.exports = class Items {
   addItems (videos) {
     const numVideos = videos.length;
 
+    const titleFontSize = Items.determineTitleFontSize(videos);
+
     for (let i = 0; i < numVideos; i++) {
       this.items.push(Item.factory(
         videos[i],
         i,
         {
+          titleFontSize,
           spaceBetween: this.spaceBetween,
           leftMargin: this.leftMargin,
           topMargin: this.topMargin,

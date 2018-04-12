@@ -9,6 +9,9 @@
     "lint": "eslint ./ --cache --quiet",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "_moduleAliases": {
+    "~": "./src"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/brainthinks/dvd_library.git"
@@ -21,6 +24,7 @@
   "homepage": "https://github.com/brainthinks/dvd_library/dvdstyler#readme",
   "dependencies": {
     "debug": "^3.1.0",
+    "module-alias": "^2.0.6",
     "xlsx": "^0.12.8",
     "xml2js": "^0.4.19"
   },
