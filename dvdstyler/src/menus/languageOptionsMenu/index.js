@@ -8,20 +8,16 @@ const LanguageOptionSelector = require('./LanguageOptionSelector');
 const ReturnButton = require('./ReturnButton');
 
 module.exports = class LanguageOptionsMenu extends Menu {
-  static fromVobMenu (menu, index, title, logo, videos, isAvailableImage) {
-    return LanguageOptionsMenu.factory(menu, index, title, logo, videos, isAvailableImage);
+  static factory (id, title, logo, videos, isAvailableImage) {
+    return new LanguageOptionsMenu(id, title, logo, videos, isAvailableImage);
   }
 
-  static factory (menu, index, title, logo, videos, isAvailableImage) {
-    return new LanguageOptionsMenu(menu, index, title, logo, videos, isAvailableImage);
-  }
+  constructor (id, title, logo, videos, isAvailableImage) {
+    super(id, title, logo, videos, isAvailableImage);
 
-  constructor (menu, index, title, logo, videos, isAvailableImage) {
-    super(menu, index, title, logo, videos, isAvailableImage);
+    const menuTitle = Title.fromIndex(id, title);
 
-    const menuTitle = Title.fromIndex(index, title);
-
-    const sidebar = Sidebar.fromIndex(index, logo)
+    const sidebar = Sidebar.fromIndex(id, logo)
       .generateLogo();
 
     const spanishSelector = LanguageOptionSelector.factory('spanish', {

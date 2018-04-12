@@ -12,7 +12,11 @@ const DvdStylerProject = require('./DvdStylerProject');
 global.NEWLINE = '<tbreak/>';
 
 async function main () {
-  const dvdStylerProject = await DvdStylerProject.fromFile(config.source, config);
+  const dvdStylerProject = await DvdStylerProject.factory(config);
+
+  dvdStylerProject.generateMenus();
+  dvdStylerProject.generateTitlesets();
+  dvdStylerProject.generateRoot();
 
   // Note - this will overwrite the target file!
   await dvdStylerProject.toFile(config.target);

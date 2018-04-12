@@ -6,23 +6,16 @@ const Title = require('../Title');
 const Sidebar = require('../Sidebar');
 
 module.exports = class MainMenu extends Menu {
-  static fromVobMenu (menu, index, title, logo, videos, isAvailableImage) {
-    return MainMenu.factory(menu, index, title, logo, videos, isAvailableImage);
+  static factory (id, title, logo, videos, isAvailableImage, options) {
+    return new MainMenu(id, title, logo, videos, isAvailableImage);
   }
 
-  static factory (menu, index, title, logo, videos, isAvailableImage) {
-    return new MainMenu(menu, index, title, logo, videos, isAvailableImage);
-  }
+  constructor (id, title, logo, videos, isAvailableImage, options) {
+    super(id, title, logo, videos, isAvailableImage, options);
 
-  constructor (menu, index, title, logo, videos, isAvailableImage) {
-    super(menu, index, title, logo, videos, isAvailableImage);
+    const menuTitle = Title.fromIndex(id, title);
 
-    // Set it as the title menu
-    this.pgc.$ = { entry: 'title' };
-
-    const menuTitle = Title.fromIndex(index, title);
-
-    const sidebar = Sidebar.fromIndex(index, logo)
+    const sidebar = Sidebar.fromIndex(id, logo)
       .generateLogo()
       .generatePlayAllButton()
       .generateLanguageOptionsButton();

@@ -9,35 +9,12 @@ const LanguageOptionsMenu = require('./menus/languageOptionsMenu/');
 const Titleset = require('./titleset/Titleset');
 
 module.exports = class DvdStylerProject {
-  static async fromFile (pathToFile, options) {
-    const parser = new xml2js.Parser();
-
-    return new Promise((resolve, reject) => {
-      fs.readFile(pathToFile, (error, dvds) => {
-        if (error) {
-          return reject(error);
-        }
-
-        parser.parseString(dvds, (error, dvdsXml) => {
-          if (error) {
-            return reject(error);
-          }
-
-          resolve(DvdStylerProject.fromXml(dvdsXml, options));
-        });
-      });
-    });
-  }
-
-  static fromXml (xml, options) {
-    return new DvdStylerProject(xml, options);
+  static factory (config) {
+    return new DvdStylerProject(config);
   }
 
   constructor (
-    root,
     {
-      clientName,
-      year,
       name,
       title,
       logo,
@@ -46,15 +23,6 @@ module.exports = class DvdStylerProject {
       isAvailableImage,
     } = {}
   ) {
-    if (!root) {
-      throw new Error('DvdStylerProject needs a root.');
-    }
-    if (!clientName) {
-      throw new Error('DvdStylerProject needs a clientName.');
-    }
-    if (!year) {
-      throw new Error('DvdStylerProject needs a year.');
-    }
     if (!name) {
       throw new Error('DvdStylerProject needs a name.');
     }
@@ -74,9 +42,6 @@ module.exports = class DvdStylerProject {
       throw new Error('DvdStylerProject needs an isAvailableImage.');
     }
 
-    this.root = root;
-    this.clientName = clientName;
-    this.year = year;
     this.name = name;
     this.title = title;
     this.logo = logo;
@@ -84,35 +49,82 @@ module.exports = class DvdStylerProject {
     this.quality = quality;
     this.isAvailableImage = isAvailableImage;
 
-    this.mainMenu = MainMenu.fromVobMenu(
-      this.root.dvdstyler.vmgm[0].menus[0].pgc[0].vob[0].menu[0],
-      0,
-      title,
-      logo,
-      videos,
-      isAvailableImage,
-    );
-
-    this.languageOptionsMenu = LanguageOptionsMenu.fromVobMenu(
-      this.root.dvdstyler.vmgm[0].menus[0].pgc[1].vob[0].menu[0],
-      1,
-      title,
-      logo,
-      videos,
-      isAvailableImage,
-    );
-
-    this.titleset = Titleset.factory(this.videos, this.quality);
-
-    // Mutate the root
-
-    this.root.dvdstyler.vmgm[0].menus[0].pgc = [
-      this.mainMenu.pgc,
-      this.languageOptionsMenu.pgc,
-    ];
-
-    this.root.dvdstyler.titleset[0] = this.titleset.titleset;
+    this.menus = [];
+    this.titlesets = [];
   }
+
+  generateMenus () {
+    this.menus.push(MainMenu.factory(
+      'main_menu',
+      this.title,
+      this.logo,
+      this.videos,
+      this.isAvailableImage,
+      {
+        isTitleMenu: true,
+      }
+    ));
+
+    this.menus.push(LanguageOptionsMenu.factory(
+      'language_options_menu',
+      this.title,
+      this.logo,
+      this.videos,
+      this.isAvailableImage,
+    ));
+  }
+
+  generateTitlesets () {
+    this.titlesets.push(Titleset.factory(this.videos, this.quality));
+  }
+
+  generateRoot () {
+    this.root = {
+      dvdstyler: {
+        $: {
+          format: 4,
+          template: 'Basic/neon.dvdt',
+          isoFile: '/home/user/dvd.iso',
+          name: this.name,
+          defPostCommand: 1,
+          videoFormat: 3,
+          audioFormat: 3,
+          aspectRatio: 1,
+        },
+        colours: [{
+          $: {
+            colour0: '#aae3ff',
+            colour1: '#00356a',
+            colour2: '#0000ec',
+            colour3: '#0080c0',
+            colour4: '#0000ec',
+            colour5: '#0000ec',
+            colour6: '#0080c0',
+            colour7: '#0080c0',
+            colour8: '#0080c0',
+          },
+        }],
+        vmgm: [{
+          fpc: [{
+            _: 'g1=0;jump vmgm menu 1;',
+          }],
+          menus: [{
+            video: [{
+              $: {
+                format: 'ntsc',
+                aspect: '4:3',
+                widescreen: 'nopanscan',
+              },
+            }],
+            audio: [{ $: { lang: 'EN' } }],
+            subpicture: [{ $: { lang: 'EN' } }],
+            pgc: this.menus.map((menu) => menu.pgc),
+          }],
+        }],
+        titleset: this.titlesets.map((titleset) => titleset.titleset),
+      },
+    };
+  };
 
   toFile (pathToFile) {
     const builder = new xml2js.Builder();

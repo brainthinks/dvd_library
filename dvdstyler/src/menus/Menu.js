@@ -3,19 +3,13 @@
 const Style = require('~/Style');
 
 module.exports = class MainMenu {
-  static fromVobMenu (menu, index, title, logo, videos, isAvailableImage) {
-    throw new Error('Abstract static method "fromVobMenu" not yet implemented...');
-  }
-
-  static factory (menu, index, title, logo, videos, isAvailableImage) {
+  static factory (id, title, logo, videos, isAvailableImage, options) {
     throw new Error('Abstract static method "factory" not yet implemented...');
   }
 
-  constructor (menu, index, title, logo, videos, isAvailableImage) {
-    if (!menu)
-      throw new Error('MainMenu needs a menu definition.');
-    if (!index && index !== 0)
-      throw new Error('MainMenu needs an index.');
+  constructor (id, title, logo, videos, isAvailableImage, { isTitleMenu } = {}) {
+    if (!id && id !== 0)
+      throw new Error('MainMenu needs an id.');
     if (!title)
       throw new Error('MainMenu needs a title.');
     if (!logo)
@@ -32,6 +26,11 @@ module.exports = class MainMenu {
     this.buttons = [];
 
     this.generateMenu();
+
+    if (isTitleMenu) {
+      // Set it as the title menu
+      this.pgc.$ = { entry: 'title' };
+    }
   }
 
   addMenuAssets (...menuAssets) {
