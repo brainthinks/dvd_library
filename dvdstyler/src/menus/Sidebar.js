@@ -50,7 +50,7 @@ module.exports = class Sidebar extends MenuAssets {
 
   generateLanguageOptionsButton () {
     this._generateButton({
-      name: 'languageOptions',
+      name: 'language', // keep it short!
       title: `Language${global.NEWLINE}Options`,
       topMargin: 400,
       action: {
@@ -106,7 +106,7 @@ module.exports = class Sidebar extends MenuAssets {
     const container_s_id = `s_${container_id}`;
     const container_href = `#${container_s_id}`;
 
-    const button_id = `${this.id}_${name}_button`;
+    const button_id = `${name}_button`;
     const button_s_id = `s_${button_id}`;
     const button_href = `#${button_s_id}`;
 
@@ -200,7 +200,7 @@ module.exports = class Sidebar extends MenuAssets {
           ry: 5,
           id: 'background',
           style: Style.factory({
-            file: 'none',
+            fill: 'none',
             'fill-opacity': 1,
           }).toXmlString(),
         },

@@ -1,4 +1,5 @@
 config.js
+configs.js
 node_modules/*
 .eslintcache
 library/*

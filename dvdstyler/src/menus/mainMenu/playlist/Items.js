@@ -99,7 +99,7 @@ module.exports = class Items {
 
       item.setButtonDirection({
         left: this.playAllButtonId,
-        right: 'none',
+        right: item.buttonId,
         up: previousButtonId,
         down: nextButtonId,
       });

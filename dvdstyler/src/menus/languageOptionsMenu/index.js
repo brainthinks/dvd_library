@@ -50,22 +50,22 @@ module.exports = class LanguageOptionsMenu extends Menu {
     });
 
     spanishSelector.setButtonDirection(0, {
-      left: 'none',
-      right: 'none',
+      left: spanishSelector.buttonId,
+      right: spanishSelector.buttonId,
       up: returnButton.buttonId,
       down: englishSelector.buttonId,
     });
 
     englishSelector.setButtonDirection(0, {
-      left: 'none',
-      right: 'none',
+      left: englishSelector.buttonId,
+      right: englishSelector.buttonId,
       up: spanishSelector.buttonId,
       down: returnButton.buttonId,
     });
 
     returnButton.setButtonDirection(0, {
-      left: 'none',
-      right: 'none',
+      left: returnButton.buttonId,
+      right: returnButton.buttonId,
       up: englishSelector.buttonId,
       down: spanishSelector.buttonId,
     });

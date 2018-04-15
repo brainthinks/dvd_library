@@ -4,4 +4,6 @@ This is still a work in progress.  I plan on using a source dvdstyler template a
 
 ## @todo
 
-* Test it!!!
+* properly encode videos (ffmpeg?)
+* generate assets without using dvdstylers, just use the stock dvdauthor tools
+* edit xcf files from the command line

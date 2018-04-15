@@ -8,6 +8,22 @@ module.exports = class Playlist {
     return new Playlist(videos, isAvailableImage, playAllButtonId);
   }
 
+  static calculateSpaceBetweenItems (videos) {
+    if (videos.length <= 15) {
+      return 28;
+    }
+
+    if (videos.length <= 17) {
+      return 24;
+    }
+
+    if (videos.length <= 19) {
+      return 22;
+    }
+
+    throw new Error(`Cannot currently support ${videos.length} videos.`);
+  }
+
   constructor (videos, isAvailableImage, playAllButtonId) {
     if (!videos)
       throw new Error('Playlist needs a video definitions.');
@@ -41,11 +57,11 @@ module.exports = class Playlist {
     this.items = Items.factory(
       videos,
       {
-        spaceBetween: 28,
+        spaceBetween: Playlist.calculateSpaceBetweenItems(videos),
         // @todo - this should come from the Sidebar
         leftMargin: 200,
         // @todo - this should come from the Title
-        topMargin: 96,
+        topMargin: 90,
         languageOptions: {
           isAvailableImage,
           leftMargin: this.columnWidths.title,

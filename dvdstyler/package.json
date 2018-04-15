@@ -25,6 +25,7 @@
   "dependencies": {
     "debug": "^3.1.0",
     "module-alias": "^2.0.6",
+    "moment": "^2.22.0",
     "xlsx": "^0.12.8",
     "xml2js": "^0.4.19"
   },

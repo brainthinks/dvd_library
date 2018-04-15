@@ -80,7 +80,7 @@ module.exports = class LanguageHeader {
         $: {
           id: 'main',
           style: Style.factory({
-            fill: '#404040',
+            fill: '#ffffff',
             'fill-opacity': 1,
             stroke: 'none',
             'stroke-opacity': 1,

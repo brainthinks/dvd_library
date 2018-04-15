@@ -28,14 +28,14 @@ module.exports = class MainMenu extends Menu {
     const playlistFirstItemId = playlist.items.items[0].button.$.id;
 
     sidebar.setButtonDirection(0, {
-      left: 'none',
+      left: playAllButtonId,
       right: playlistFirstItemId,
       up: languageOptionsButtonId,
       down: languageOptionsButtonId,
     });
 
     sidebar.setButtonDirection(1, {
-      left: 'none',
+      left: languageOptionsButtonId,
       right: playlistFirstItemId,
       up: playAllButtonId,
       down: playAllButtonId,

@@ -82,7 +82,7 @@ module.exports = class Title extends MenuAssets {
             style: Style.factory({
               'dominant-baseline': 'middle',
               'font-family': 'Standard Symbols L',
-              'font-size': 24,
+              'font-size': this.title.length > 55 ? 17 : 19,
               'font-style': 'normal',
               'font-weight': 'bold',
               'stroke-width': 0,
@@ -98,9 +98,9 @@ module.exports = class Title extends MenuAssets {
   generateGObjectUses () {
     this.gObjectUses.push({
       $: {
-        x: 104,
+        x: 0,
         y: 32,
-        width: 506,
+        width: '100%',
         height: 24,
         id: this.id,
         'xlink:href': this.href,
