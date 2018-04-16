@@ -82,7 +82,7 @@ module.exports = class Title extends MenuAssets {
             style: Style.factory({
               'dominant-baseline': 'middle',
               'font-family': 'Standard Symbols L',
-              'font-size': this.title.length > 55 ? 17 : 19,
+              'font-size': this.title.length > 50 ? 14 : 19,
               'font-style': 'normal',
               'font-weight': 'bold',
               'stroke-width': 0,
