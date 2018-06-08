@@ -4,6 +4,7 @@ This is still a work in progress.  I plan on using a source dvdstyler template a
 
 ## @todo
 
-* properly encode videos (ffmpeg?)
+* properly encode videos (ffmpeg?) - currently, it seems like I was able to do this, but they are written to disk wrong :(
+* allow navigating backwards in playall
 * generate assets without using dvdstylers, just use the stock dvdauthor tools
 * edit xcf files from the command line

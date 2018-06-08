@@ -24,14 +24,14 @@ module.exports = class Title {
           file: this.config.video[this.quality],
           chapters: this.config.chapters.join(','),
         },
-        video: [{ $: { format: 1 } }],
+        video: [{ $: { format: 3 } }],
         audio: [
           {
-            $: { format: 1 },
+            $: { format: 3 },
             _: this.config.audio.english,
           },
           {
-            $: { format: 1 },
+            $: { format: 3 },
             _: this.config.audio.spanish || this.config.audio.english,
           },
         ],
