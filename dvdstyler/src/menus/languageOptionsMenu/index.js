@@ -8,12 +8,20 @@ const LanguageOptionSelector = require('./LanguageOptionSelector');
 const ReturnButton = require('./ReturnButton');
 
 module.exports = class LanguageOptionsMenu extends Menu {
-  static factory (id, title, logo, videos, isAvailableImage) {
-    return new LanguageOptionsMenu(id, title, logo, videos, isAvailableImage);
+  static factory (
+    id, title, logo, videos, isAvailableImage
+  ) {
+    return new LanguageOptionsMenu(
+      id, title, logo, videos, isAvailableImage
+    );
   }
 
-  constructor (id, title, logo, videos, isAvailableImage) {
-    super(id, title, logo, videos, isAvailableImage);
+  constructor (
+    id, title, logo, videos, isAvailableImage
+  ) {
+    super(
+      id, title, logo, videos, isAvailableImage
+    );
 
     const menuTitle = Title.fromIndex(id, title);
 

@@ -7,7 +7,8 @@
   "scripts": {
     "generate": "DEBUG=* ./src/index.js",
     "generateCatalog": "DEBUG=* ./scripts/generateCatalog.js",
-    "lint": "eslint ./ --cache --quiet",
+    "lint": "./scripts/lint.sh",
+    "lint-fix": "./scripts/lint.sh --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "_moduleAliases": {

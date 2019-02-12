@@ -57,7 +57,9 @@ const Titleset = require('./titleset/Titleset');
  *   executed with the arguments that you would normally have passed the
  *   `asyncFunction`, except for the callback.
  */
-function asPromise (asyncFunction, { context, resolveWithError } = {}) {
+function asPromise (asyncFunction, {
+  context, resolveWithError,
+} = {}) {
   if (!asyncFunction || typeof asyncFunction !== 'function') {
     throw new Error('asPromise needs a function.');
   }
@@ -69,17 +71,22 @@ function asPromise (asyncFunction, { context, resolveWithError } = {}) {
       }
 
       if (resolveWithError) {
-        return resolve([ error, ...results ]);
+        return resolve([
+          error,
+          ...results,
+        ]);
       }
 
       resolve(results);
     }
 
     if (context) {
-      return asyncFunction.call(context, ...args, callback);
+      return asyncFunction.call(
+        context, ...args, callback
+      );
     }
 
-    asyncFunction(...args, callback)
+    asyncFunction(...args, callback);
   });
 }
 
@@ -93,16 +100,14 @@ module.exports = class DvdStylerProject {
     await asPromise(fs.writeFile)(pathToFile, xml);
   }
 
-  constructor (
-    {
-      title,
-      logo,
-      videos,
-      quality,
-      isAvailableImage,
-      ...config
-    } = {}
-  ) {
+  constructor ({
+    title,
+    logo,
+    videos,
+    quality,
+    isAvailableImage,
+    ...config
+  } = {}) {
     if (!title) {
       throw new Error('DvdStylerProject needs a title.');
     }
@@ -157,23 +162,43 @@ module.exports = class DvdStylerProject {
 
   generateRoot () {
     this.body = {
-      vmgm: [{
-        fpc: [{
-          _: 'g1=0;jump vmgm menu 1;',
-        }],
-        menus: [{
-          video: [{
-            $: {
-              format: 'ntsc',
-              aspect: '4:3',
-              widescreen: 'nopanscan',
+      vmgm: [
+        {
+          fpc: [
+            {
+              _: 'g1=0;jump vmgm menu 1;',
             },
-          }],
-          audio: [{ $: { lang: 'EN' } }],
-          subpicture: [{ $: { lang: 'EN' } }],
-          pgc: this.menus.map((menu) => menu.pgc),
-        }],
-      }],
+          ],
+          menus: [
+            {
+              video: [
+                {
+                  $: {
+                    format: 'ntsc',
+                    aspect: '4:3',
+                    widescreen: 'nopanscan',
+                  },
+                },
+              ],
+              audio: [
+                {
+                  $: {
+                    lang: 'EN',
+                  },
+                },
+              ],
+              subpicture: [
+                {
+                  $: {
+                    lang: 'EN',
+                  },
+                },
+              ],
+              pgc: this.menus.map((menu) => menu.pgc),
+            },
+          ],
+        },
+      ],
       titleset: this.titlesets.map((titleset) => titleset.titleset),
     };
 
@@ -189,23 +214,25 @@ module.exports = class DvdStylerProject {
           audioFormat: 3,
           aspectRatio: 1,
         },
-        colours: [{
-          $: {
-            colour0: '#aae3ff',
-            colour1: '#00356a',
-            colour2: '#0000ec',
-            colour3: '#0080c0',
-            colour4: '#0000ec',
-            colour5: '#0000ec',
-            colour6: '#0080c0',
-            colour7: '#0080c0',
-            colour8: '#0080c0',
+        colours: [
+          {
+            $: {
+              colour0: '#aae3ff',
+              colour1: '#00356a',
+              colour2: '#0000ec',
+              colour3: '#0080c0',
+              colour4: '#0000ec',
+              colour5: '#0000ec',
+              colour6: '#0080c0',
+              colour7: '#0080c0',
+              colour8: '#0080c0',
+            },
           },
-        }],
+        ],
         ...this.body,
       },
     };
-  };
+  }
 
   async generateDvdStylerXML (target) {
     const builder = new xml2js.Builder();

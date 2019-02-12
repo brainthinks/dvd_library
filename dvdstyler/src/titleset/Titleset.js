@@ -21,24 +21,49 @@ module.exports = class Titleset {
 
   generateTitleset () {
     this.titleset = {
-      menus: [{
-        video: [{ $: { widescreen: 'nopanscan' } }],
-        audio: [{ $: { lang: 'EN' } }],
-      }],
-      titles: [{
-        video: [{
-          $: {
-            aspect: '4:3',
-            widescreen: 'nopanscan',
-          },
-        }],
-        audio: [
-          { $: { lang: 'EN' } },
-          { $: { lang: 'ES' } },
-        ],
-        pgc: this.configs.map((config) => Title.factory(config, this.quality).pgc),
-      }],
+      menus: [
+        {
+          video: [
+            {
+              $: {
+                widescreen: 'nopanscan',
+              },
+            },
+          ],
+          audio: [
+            {
+              $: {
+                lang: 'EN',
+              },
+            },
+          ],
+        },
+      ],
+      titles: [
+        {
+          video: [
+            {
+              $: {
+                aspect: '4:3',
+                widescreen: 'nopanscan',
+              },
+            },
+          ],
+          audio: [
+            {
+              $: {
+                lang: 'EN',
+              },
+            },
+            {
+              $: {
+                lang: 'ES',
+              },
+            },
+          ],
+          pgc: this.configs.map((config) => Title.factory(config, this.quality).pgc),
+        },
+      ],
     };
   }
-
 };

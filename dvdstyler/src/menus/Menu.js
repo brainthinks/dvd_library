@@ -3,11 +3,17 @@
 const Style = require('~/Style');
 
 module.exports = class MainMenu {
-  static factory (id, title, logo, videos, isAvailableImage, options) {
+  static factory (
+    id, title, logo, videos, isAvailableImage, options
+  ) {
     throw new Error('Abstract static method "factory" not yet implemented...');
   }
 
-  constructor (id, title, logo, videos, isAvailableImage, { isTitleMenu } = {}) {
+  constructor (
+    id, title, logo, videos, isAvailableImage, {
+      isTitleMenu,
+    } = {}
+  ) {
     if (!id && id !== 0)
       throw new Error('MainMenu needs an id.');
     if (!title)
@@ -29,7 +35,9 @@ module.exports = class MainMenu {
 
     if (isTitleMenu) {
       // Set it as the title menu
-      this.pgc.$ = { entry: 'title' };
+      this.pgc.$ = {
+        entry: 'title',
+      };
     }
   }
 
@@ -49,45 +57,65 @@ module.exports = class MainMenu {
 
   generateMenu () {
     this.pgc = {
-      vob: [{
-        $: { pause: 'inf' },
-        menu: [{
+      vob: [
+        {
           $: {
-            videoFormat: 'NTSC',
-            aspectRatio: 1,
+            pause: 'inf',
           },
-          svg: [{
-            $: {
-              width: 720,
-              height: 540,
-            },
-            rect: [{
+          menu: [
+            {
               $: {
-                width: 720,
-                height: 540,
-                id: 'backgroundColour',
-                style: Style.factory({ fill: '#444444' }).toXmlString(),
+                videoFormat: 'NTSC',
+                aspectRatio: 1,
               },
-            }],
-            defs: [{
-              $: { id: 'defs' },
-              svg: this.svgs,
-            }],
-            g: [
-              {
-                $: { id: 'objects' },
-                use: this.gObjectUses,
-              },
-              {
-                $: { id: 'buttons' },
-                use: this.gButtonUses,
-              },
-            ],
-          }],
-          button: this.buttons,
-          object: this.objects,
-        }],
-      }],
+              svg: [
+                {
+                  $: {
+                    width: 720,
+                    height: 540,
+                  },
+                  rect: [
+                    {
+                      $: {
+                        width: 720,
+                        height: 540,
+                        id: 'backgroundColour',
+                        style: Style.factory({
+                          fill: '#444444',
+                        }).toXmlString(),
+                      },
+                    },
+                  ],
+                  defs: [
+                    {
+                      $: {
+                        id: 'defs',
+                      },
+                      svg: this.svgs,
+                    },
+                  ],
+                  g: [
+                    {
+                      $: {
+                        id: 'objects',
+                      },
+                      use: this.gObjectUses,
+                    },
+                    {
+                      $: {
+                        id: 'buttons',
+                      },
+                      use: this.gButtonUses,
+                    },
+                  ],
+                },
+              ],
+              button: this.buttons,
+              object: this.objects,
+            },
+          ],
+        },
+      ],
     };
 
     return this;

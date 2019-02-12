@@ -19,30 +19,45 @@ module.exports = class Title {
 
   generatePgc () {
     this.pgc = {
-      vob: [{
-        $: {
-          file: this.config.video[this.quality],
-          chapters: this.config.chapters.join(','),
+      vob: [
+        {
+          $: {
+            file: this.config.video[this.quality],
+            chapters: this.config.chapters.join(','),
+          },
+          video: [
+            {
+              $: {
+                format: 3,
+              },
+            },
+          ],
+          audio: [
+            {
+              $: {
+                format: 3,
+              },
+              _: this.config.audio.english,
+            },
+            {
+              $: {
+                format: 3,
+              },
+              _: this.config.audio.spanish || this.config.audio.english,
+            },
+          ],
         },
-        video: [{ $: { format: 3 } }],
-        audio: [
-          {
-            $: { format: 3 },
-            _: this.config.audio.english,
-          },
-          {
-            $: { format: 3 },
-            _: this.config.audio.spanish || this.config.audio.english,
-          },
-        ],
-      }],
-      pre: [{
-        _: 'if ( g1==0 ) { audio=0; } else { audio=1; }',
-      }],
-      post: [{
-        _: 'call last menu;',
-      }],
+      ],
+      pre: [
+        {
+          _: 'if ( g1==0 ) { audio=0; } else { audio=1; }',
+        },
+      ],
+      post: [
+        {
+          _: 'call last menu;',
+        },
+      ],
     };
   }
-
 };

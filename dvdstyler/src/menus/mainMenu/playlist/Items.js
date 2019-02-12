@@ -36,16 +36,14 @@ module.exports = class Items {
     return smallestTitleFontSize;
   }
 
-  constructor (
-    videos,
+  constructor (videos,
     {
       spaceBetween,
       leftMargin,
       topMargin,
       languageOptions,
       playAllButtonId,
-    } = {}
-  ) {
+    } = {}) {
     if (!videos)
       throw new Error('Items needs videos.');
     if (!spaceBetween)
@@ -110,15 +108,21 @@ module.exports = class Items {
     const numItems = this.items.length;
 
     for (let i = 0; i < numItems; i++) {
-      func(this.items[i], i, this.items, this);
+      func(
+        this.items[i], i, this.items, this
+      );
     }
   }
 
   map (func) {
     const results = [];
 
-    this.forEach((item, index, items, context) => {
-      results.push(func(item, index, items, context));
+    this.forEach((
+      item, index, items, context
+    ) => {
+      results.push(func(
+        item, index, items, context
+      ));
     });
 
     return results;

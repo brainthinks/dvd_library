@@ -22,7 +22,9 @@ module.exports = class MenuAssets {
     this.buttons = [];
   }
 
-  setButtonDirection (index, { left, right, up, down }) {
+  setButtonDirection (index, {
+    left, right, up, down,
+  }) {
     if (!index && index !== 0)
       throw new Error('You must supply the button index when setting button direction.');
     if (!left)

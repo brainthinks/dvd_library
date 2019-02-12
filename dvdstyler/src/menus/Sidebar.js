@@ -61,23 +61,31 @@ module.exports = class Sidebar extends MenuAssets {
     return this;
   }
 
-  _generateLogo ({ topMargin, height, logo }) {
+  _generateLogo ({
+    topMargin, height, logo,
+  }) {
     const id = `${this.id}_logo`;
     const s_id = `s_${id}`;
     const href = `#${s_id}`;
 
     this.svgs.push({
-      $: { id: s_id },
-      image: [{
-        $: {
-          width: '100%',
-          height: '100%',
-          preserveAspectRatio: 'none',
-          id: 'image',
-          'xlink:href': logo,
-          style: Style.factory({ opacity: 1 }).toXmlString(),
+      $: {
+        id: s_id,
+      },
+      image: [
+        {
+          $: {
+            width: '100%',
+            height: '100%',
+            preserveAspectRatio: 'none',
+            id: 'image',
+            'xlink:href': logo,
+            style: Style.factory({
+              opacity: 1,
+            }).toXmlString(),
+          },
         },
-      }],
+      ],
     });
 
     this.gObjectUses.push({
@@ -97,11 +105,17 @@ module.exports = class Sidebar extends MenuAssets {
         keepAspectRatio: 'true',
         displayVideoFrame: 'false',
       },
-      filename: [{ _: 'image.xml' }],
+      filename: [
+        {
+          _: 'image.xml',
+        },
+      ],
     });
   }
 
-  _generateButton ({ name, title, topMargin, action }) {
+  _generateButton ({
+    name, title, topMargin, action,
+  }) {
     const container_id = `${this.id}_${name}_container`;
     const container_s_id = `s_${container_id}`;
     const container_href = `#${container_s_id}`;
@@ -112,56 +126,82 @@ module.exports = class Sidebar extends MenuAssets {
 
     // Button container
     this.svgs.push({
-      $: { id: container_s_id },
-      defs: [{
-        filter: [{
-          $: { id: 'shadowFilter' },
-          feGaussianBlur: [{ $: { stdDeviation: 3 } }],
-        }],
-      }],
-      image: [{
-        $: {
-          width: '100%',
-          height: '100%',
-          preserveAspectRatio: 'xmidymid slice',
-          id: 'image',
-          style: Style.factory({ opacity: 1 }).toXmlString(),
+      $: {
+        id: container_s_id,
+      },
+      defs: [
+        {
+          filter: [
+            {
+              $: {
+                id: 'shadowFilter',
+              },
+              feGaussianBlur: [
+                {
+                  $: {
+                    stdDeviation: 3,
+                  },
+                },
+              ],
+            },
+          ],
         },
-      }],
-      use: [{
-        $: {
-          id: 'shadow',
-          'xlink:href': '#rect',
-          style: Style.factory({
-            fill: 'none',
-            filter: 'url(#shadowFilter)',
-            stroke: '#404040',
-            'stroke-opacity': 1,
-            visibility: 'visible',
-          }).toXmlString(),
-        },
-      }],
-      g: [{
-        $: {
-          id: 'main',
-          style: Style.factory({
-            fill: '#000000',
-            'fill-opacity': 1,
-            stroke: '#768c9c',
-            'stroke-opacity': 1,
-          }).toXmlString(),
-        },
-        rect: [{
+      ],
+      image: [
+        {
           $: {
             width: '100%',
             height: '100%',
-            rx: 0,
-            ry: 0,
-            id: 'rect',
-            style: Style.factory({ 'stroke-width': 5 }).toXmlString(),
+            preserveAspectRatio: 'xmidymid slice',
+            id: 'image',
+            style: Style.factory({
+              opacity: 1,
+            }).toXmlString(),
           },
-        }],
-      }],
+        },
+      ],
+      use: [
+        {
+          $: {
+            id: 'shadow',
+            'xlink:href': '#rect',
+            style: Style.factory({
+              fill: 'none',
+              filter: 'url(#shadowFilter)',
+              stroke: '#404040',
+              'stroke-opacity': 1,
+              visibility: 'visible',
+            }).toXmlString(),
+          },
+        },
+      ],
+      g: [
+        {
+          $: {
+            id: 'main',
+            style: Style.factory({
+              fill: '#000000',
+              'fill-opacity': 1,
+              stroke: '#768c9c',
+              'stroke-opacity': 1,
+            }).toXmlString(),
+          },
+          rect: [
+            {
+              $: {
+                width: '100%',
+                height: '100%',
+                rx: 0,
+                ry: 0,
+                id: 'rect',
+                style: Style.factory({
+                  'stroke-width': 5,
+                }).toXmlString(),
+              },
+            },
+          ],
+        },
+      ],
     });
 
     this.gObjectUses.push({
@@ -180,66 +220,90 @@ module.exports = class Sidebar extends MenuAssets {
         id: container_id,
         displayVideoFrame: 'false',
       },
-      filename: [{ _: 'frame-v3.xml' }],
+      filename: [
+        {
+          _: 'frame-v3.xml',
+        },
+      ],
     });
 
     // Button
     this.svgs.push({
-      $: { id: button_s_id },
-      defs: [{
-        filter: [{
-          $: { id: 'shadowFilter' },
-          feGaussianBlur: { stdDeviation: 3 },
-        }],
-      }],
-      rect: [{
-        $: {
-          width: '100%',
-          height: '100%',
-          rx: 5,
-          ry: 5,
-          id: 'background',
-          style: Style.factory({
-            fill: 'none',
-            'fill-opacity': 1,
-          }).toXmlString(),
+      $: {
+        id: button_s_id,
+      },
+      defs: [
+        {
+          filter: [
+            {
+              $: {
+                id: 'shadowFilter',
+              },
+              feGaussianBlur: {
+                stdDeviation: 3,
+              },
+            },
+          ],
         },
-      }],
-      use: [{
-        $: {
-          id: 'shadow',
-          'xlink:href': '#text',
-          style: Style.factory({
-            fill: '#404040',
-            'fill-opacity': 1,
-            filter: 'url(#shadowFilter)',
-            visibility: 'hidden',
-          }).toXmlString(),
-        },
-      }],
-      g: [{
-        $: {
-          id: 'gText',
-          style: Style.factory({ fill: '#ffffff' }).toXmlString(),
-        },
-        text: [{
+      ],
+      rect: [
+        {
           $: {
-            x: '50%',
-            y: '50%',
-            id: 'text',
-            'xml:space': 'preserve',
+            width: '100%',
+            height: '100%',
+            rx: 5,
+            ry: 5,
+            id: 'background',
             style: Style.factory({
-              'dominant-baseline': 'middle',
-              'font-family': 'Sans',
-              'font-size': 20,
-              'font-style': 'normal',
-              'font-weight': 'normal',
-              'text-anchor': 'middle',
+              fill: 'none',
+              'fill-opacity': 1,
             }).toXmlString(),
           },
-          _: title,
-        }],
-      }],
+        },
+      ],
+      use: [
+        {
+          $: {
+            id: 'shadow',
+            'xlink:href': '#text',
+            style: Style.factory({
+              fill: '#404040',
+              'fill-opacity': 1,
+              filter: 'url(#shadowFilter)',
+              visibility: 'hidden',
+            }).toXmlString(),
+          },
+        },
+      ],
+      g: [
+        {
+          $: {
+            id: 'gText',
+            style: Style.factory({
+              fill: '#ffffff',
+            }).toXmlString(),
+          },
+          text: [
+            {
+              $: {
+                x: '50%',
+                y: '50%',
+                id: 'text',
+                'xml:space': 'preserve',
+                style: Style.factory({
+                  'dominant-baseline': 'middle',
+                  'font-family': 'Sans',
+                  'font-size': 20,
+                  'font-style': 'normal',
+                  'font-weight': 'normal',
+                  'text-anchor': 'middle',
+                }).toXmlString(),
+              },
+              _: title,
+            },
+          ],
+        },
+      ],
     });
 
     this.gButtonUses.push({
@@ -254,18 +318,34 @@ module.exports = class Sidebar extends MenuAssets {
     });
 
     this.buttons.push({
-      $: { id: button_id },
-      action: [{ $: action }],
-      direction: [{ $: {} }],
-      filename: [{ _: 'text-v3.xml' }],
-      parameter: [{
-        $: {
-          name: 'text_fill',
-          normal: '#ffffff',
-          highlighted: '#0000ff',
-          selected: '#ff0000',
+      $: {
+        id: button_id,
+      },
+      action: [
+        {
+          $: action,
         },
-      }],
+      ],
+      direction: [
+        {
+          $: {},
+        },
+      ],
+      filename: [
+        {
+          _: 'text-v3.xml',
+        },
+      ],
+      parameter: [
+        {
+          $: {
+            name: 'text_fill',
+            normal: '#ffffff',
+            highlighted: '#0000ff',
+            selected: '#ff0000',
+          },
+        },
+      ],
     });
   }
 };

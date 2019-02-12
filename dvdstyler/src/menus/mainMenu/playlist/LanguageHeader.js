@@ -3,11 +3,17 @@
 const Style = require('~/Style');
 
 module.exports = class LanguageHeader {
-  static factory (id, text, leftMargin, topMargin) {
-    return new LanguageHeader(id, text, leftMargin, topMargin);
+  static factory (
+    id, text, leftMargin, topMargin
+  ) {
+    return new LanguageHeader(
+      id, text, leftMargin, topMargin
+    );
   }
 
-  constructor (id, text, leftMargin, topMargin) {
+  constructor (
+    id, text, leftMargin, topMargin
+  ) {
     if (!id) {
       throw new Error('LanguageHeader needs an id.');
     }
@@ -43,68 +49,88 @@ module.exports = class LanguageHeader {
       $: {
         id: this.sObjectId,
       },
-      defs: [{
-        filter: [{
-          $: { id: 'shadowFilter' },
-          feGaussianBlur: [{ $: { stdDeviation: 3 } }],
-        }],
-      }],
-      rect: [{
-        $: {
-          width: '100%',
-          height: '100%',
-          x: '0',
-          y: '0',
-          id: 'background',
-          style: Style.factory({
-            fill: 'none',
-            'fill-opacity': 1,
-          }).toXmlString(),
+      defs: [
+        {
+          filter: [
+            {
+              $: {
+                id: 'shadowFilter',
+              },
+              feGaussianBlur: [
+                {
+                  $: {
+                    stdDeviation: 3,
+                  },
+                },
+              ],
+            },
+          ],
         },
-      }],
-      use: [{
-        $: {
-          x: 2,
-          y: 2,
-          id: 'shadow',
-          'xlink:href': '#text',
-          style: Style.factory({
-            fill: '#404040',
-            'fill-opacity': 1,
-            filter: 'url(#shadowFilter)',
-            visibility: 'visible',
-          }).toXmlString(),
-        },
-      }],
-      g: [{
-        $: {
-          id: 'main',
-          style: Style.factory({
-            fill: '#ffffff',
-            'fill-opacity': 1,
-            stroke: 'none',
-            'stroke-opacity': 1,
-          }).toXmlString(),
-        },
-        text: [{
+      ],
+      rect: [
+        {
           $: {
-            x: '50%',
-            y: '50%',
-            id: 'text',
-            'xml:space': 'preserve',
+            width: '100%',
+            height: '100%',
+            x: '0',
+            y: '0',
+            id: 'background',
             style: Style.factory({
-              'dominant-baseline': 'middle',
-              'font-family': 'Noto Serif',
-              'font-size': 20,
-              'font-style': 'normal',
-              'font-weight': 'normal',
-              'stroke-width': 0,
-              'text-anchor': 'middle',
+              fill: 'none',
+              'fill-opacity': 1,
             }).toXmlString(),
           },
-          _: this.text,
-        }],
-      }],
+        },
+      ],
+      use: [
+        {
+          $: {
+            x: 2,
+            y: 2,
+            id: 'shadow',
+            'xlink:href': '#text',
+            style: Style.factory({
+              fill: '#404040',
+              'fill-opacity': 1,
+              filter: 'url(#shadowFilter)',
+              visibility: 'visible',
+            }).toXmlString(),
+          },
+        },
+      ],
+      g: [
+        {
+          $: {
+            id: 'main',
+            style: Style.factory({
+              fill: '#ffffff',
+              'fill-opacity': 1,
+              stroke: 'none',
+              'stroke-opacity': 1,
+            }).toXmlString(),
+          },
+          text: [
+            {
+              $: {
+                x: '50%',
+                y: '50%',
+                id: 'text',
+                'xml:space': 'preserve',
+                style: Style.factory({
+                  'dominant-baseline': 'middle',
+                  'font-family': 'Noto Serif',
+                  'font-size': 20,
+                  'font-style': 'normal',
+                  'font-weight': 'normal',
+                  'stroke-width': 0,
+                  'text-anchor': 'middle',
+                }).toXmlString(),
+              },
+              _: this.text,
+            },
+          ],
+        },
+      ],
     };
   }
 
@@ -128,7 +154,11 @@ module.exports = class LanguageHeader {
         defSize: 'true',
         displayVideoFrame: 'false',
       },
-      filename: [{ _: 'text-v2.xml' }],
+      filename: [
+        {
+          _: 'text-v2.xml',
+        },
+      ],
     };
   }
 };

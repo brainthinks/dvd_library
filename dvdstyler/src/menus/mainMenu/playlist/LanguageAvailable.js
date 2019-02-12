@@ -5,13 +5,19 @@ const debug = require('debug')('dvdstyler:LanguageAvailable');
 const Style = require('~/Style');
 
 module.exports = class LanguageAvailable {
-  static factory (id, image, leftMargin, topMargin) {
+  static factory (
+    id, image, leftMargin, topMargin
+  ) {
     debug(`factory - ${id}, ${image}, ${leftMargin}, ${topMargin}`);
 
-    return new LanguageAvailable(id, image, leftMargin, topMargin);
+    return new LanguageAvailable(
+      id, image, leftMargin, topMargin
+    );
   }
 
-  constructor (id, image, leftMargin, topMargin) {
+  constructor (
+    id, image, leftMargin, topMargin
+  ) {
     debug(`constructor - ${id}, ${image}, ${leftMargin}, ${topMargin}`);
 
     if (!id) {
@@ -46,16 +52,20 @@ module.exports = class LanguageAvailable {
       $: {
         id: this.sObjectId,
       },
-      image: [{
-        $: {
-          width: '100%',
-          height: '100%',
-          preserveAspectRatio: 'none',
-          id: 'image',
-          'xlink:href': this.image,
-          style: Style.factory({ opacity: 1 }).toXmlString(),
+      image: [
+        {
+          $: {
+            width: '100%',
+            height: '100%',
+            preserveAspectRatio: 'none',
+            id: 'image',
+            'xlink:href': this.image,
+            style: Style.factory({
+              opacity: 1,
+            }).toXmlString(),
+          },
         },
-      }],
+      ],
     };
   }
 
@@ -79,7 +89,9 @@ module.exports = class LanguageAvailable {
         keepAspectRatio: 'true',
         displayVideoFrame: 'false',
       },
-      filename: { _: 'image.xml' },
+      filename: {
+        _: 'image.xml',
+      },
     };
   }
 };

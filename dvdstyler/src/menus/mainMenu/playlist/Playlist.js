@@ -4,8 +4,12 @@ const LanguageHeader = require('./LanguageHeader');
 const Items = require('./Items');
 
 module.exports = class Playlist {
-  static factory (videos, isAvailableImage, playAllButtonId) {
-    return new Playlist(videos, isAvailableImage, playAllButtonId);
+  static factory (
+    videos, isAvailableImage, playAllButtonId
+  ) {
+    return new Playlist(
+      videos, isAvailableImage, playAllButtonId
+    );
   }
 
   static calculateSpaceBetweenItems (videos) {
@@ -24,7 +28,9 @@ module.exports = class Playlist {
     throw new Error(`Cannot currently support ${videos.length} videos.`);
   }
 
-  constructor (videos, isAvailableImage, playAllButtonId) {
+  constructor (
+    videos, isAvailableImage, playAllButtonId
+  ) {
     if (!videos)
       throw new Error('Playlist needs a video definitions.');
     if (!isAvailableImage)
@@ -54,8 +60,7 @@ module.exports = class Playlist {
       this.topMargin
     );
 
-    this.items = Items.factory(
-      videos,
+    this.items = Items.factory(videos,
       {
         spaceBetween: Playlist.calculateSpaceBetweenItems(videos),
         // @todo - this should come from the Sidebar
@@ -68,8 +73,7 @@ module.exports = class Playlist {
           spaceBetween: this.columnWidths.language,
         },
         playAllButtonId,
-      },
-    );
+      },);
 
     this.svgs = [
       this.englishHeader.svg,

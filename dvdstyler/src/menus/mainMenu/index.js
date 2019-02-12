@@ -6,12 +6,20 @@ const Title = require('../Title');
 const Sidebar = require('../Sidebar');
 
 module.exports = class MainMenu extends Menu {
-  static factory (id, title, logo, videos, isAvailableImage, options) {
-    return new MainMenu(id, title, logo, videos, isAvailableImage);
+  static factory (
+    id, title, logo, videos, isAvailableImage, options
+  ) {
+    return new MainMenu(
+      id, title, logo, videos, isAvailableImage
+    );
   }
 
-  constructor (id, title, logo, videos, isAvailableImage, options) {
-    super(id, title, logo, videos, isAvailableImage, options);
+  constructor (
+    id, title, logo, videos, isAvailableImage, options
+  ) {
+    super(
+      id, title, logo, videos, isAvailableImage, options
+    );
 
     const menuTitle = Title.fromIndex(id, title);
 
@@ -23,7 +31,9 @@ module.exports = class MainMenu extends Menu {
     const playAllButtonId = sidebar.buttons[0].$.id;
     const languageOptionsButtonId = sidebar.buttons[1].$.id;
 
-    const playlist = Playlist.factory(videos, isAvailableImage, playAllButtonId);
+    const playlist = Playlist.factory(
+      videos, isAvailableImage, playAllButtonId
+    );
 
     const playlistFirstItemId = playlist.items.items[0].button.$.id;
 
