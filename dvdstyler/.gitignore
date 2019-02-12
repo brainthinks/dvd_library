@@ -1,6 +1,7 @@
-config.js
-configs.js
-node_modules/*
-.eslintcache
-library/*
-build/*
+/node_modules
+/build
+/.eslintcache
+
+/configs
+/config.js
+/configs.js
