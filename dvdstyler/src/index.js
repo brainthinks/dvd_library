@@ -4,45 +4,61 @@
 
 require('module-alias/register');
 
-const pathToConfig = process.argv[2];
-
-if (!pathToConfig) {
-  throw new Error('You must tell the script what ids to include in the dvd!');
-}
-
 const child_process = require('child_process');
 
-const config = require(pathToConfig);
-const configs = require('../configs')(config);
+const Logger = require('./Logger');
 const DvdStylerProject = require('./DvdStylerProject');
 
-global.NEWLINE = '<tbreak/>';
+const logger = Logger.factory('main');
 
+// @todo - validate config
 async function processConfig (config) {
-  const dvdStylerProject = await DvdStylerProject.factory(config);
+  try {
+    const dvdStylerProject = DvdStylerProject.factory(config);
 
-  dvdStylerProject.generateMenus();
-  dvdStylerProject.generateTitlesets();
-  dvdStylerProject.generateRoot();
+    dvdStylerProject.generateMenus();
+    dvdStylerProject.generateTitlesets();
+    dvdStylerProject.generateRoot();
 
-  // Note - this will overwrite the target files!
-  await dvdStylerProject.generateDvdStylerXML(config.targets.dvds);
-  await dvdStylerProject.prepareIsoDirectory(config.targets.iso);
+    // Note - this will overwrite the target files!
+    await dvdStylerProject.generateDvdStylerXML(config.targets.dvds);
+    await dvdStylerProject.prepareIsoDirectory(config.targets.iso);
 
-  child_process.exec(`dvdstyler "${config.targets.dvds}"`);
+    await utils.asPromise(child_process.exec)(`dvdstyler "${config.targets.dvds}"`);
+  }
+  catch (error) {
+    logger.error(`Failed to process config for`);
+    throw error;
+  }
 }
 
 async function main () {
-  await Promise.all(configs.map((config) => processConfig(config)));
+  const pathToConfig = process.argv[2];
+
+  if (!pathToConfig) {
+    throw logger.error('You must tell the script what ids to include in the dvd!');
+  }
+
+  const Configs = require(pathToConfig);
+  const configs = await Configs();
+  console.log(configs);
+  process.exit();
+
+  // @todo - no globals!
+  global.NEWLINE = '<tbreak/>';
+
+  await Promise.all(configs.map((config) => {
+    return processConfig(config);
+  }));
 }
 
 main()
   .then(() => {
-    console.log('SUCCESS');
+    logger.info(`Successfully generated dvdstyler templates`);
     process.exit();
   })
   .catch((error) => {
-    console.error('FAILURE');
-    console.error(error);
+    logger.error(`Failed to generate dvdstyler templates`);
+    logger.error(error);
     process.exit(1);
   });

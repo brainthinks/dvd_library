@@ -7,14 +7,27 @@ const Logger = require('../Logger');
 
 const logger = Logger.factory('utils:config:time');
 
-async function getRunTime(basePath, seriesName, id) {
+async function getRunTime(basePath, seriesName, record = {}) {
   try {
-    logger.debug(`Getting run time of "${id}"`);
+    if (!basePath) {
+      throw logger.error('"basePath" is required');
+    }
+    if (!seriesName) {
+      throw logger.error('"seriesName" is required');
+    }
+    if (!record) {
+      throw logger.error('"record" is required');
+    }
+    if (!record.id) {
+      throw logger.error('"record.id" is required');
+    }
 
-    const path = await pathUtils.getVideoFilePath(basePath, seriesName, id);
+    logger.debug(`Getting run time of "${record.id}"`);
+
+    const path = await pathUtils.getVideoFilePath(basePath, seriesName, record);
     const command = `ffmpeg -i "${path}" 2>&1 | grep -i duration`;
 
-    logger.debug(`Using the following ffmpeg command to get run time of "${id}"`);
+    logger.debug(`Using the following ffmpeg command to get run time of "${record.id}"`);
     logger.debug(command);
 
     // The promisify version that the documentation references returns
@@ -34,14 +47,14 @@ async function getRunTime(basePath, seriesName, id) {
         }
 
         const duration = stdout.split(',')[0].split(': ')[1].trim();
-        logger.debug(`${id} has a duration of "${duration}"`);
+        logger.debug(`${record.id} has a duration of "${duration}"`);
 
         resolve(duration);
       });
     });
   }
   catch (error) {
-    logger.error(`Failed to get run time for ${id}`);
+    logger.error(`Failed to get run time for ${record.id}`);
     throw error;
   }
 }
@@ -100,11 +113,11 @@ function generateChapters(runTime, introEnd) {
   }
 }
 
-async function getTimeStuff (basePath, seriesName, id, introEnd) {
+async function getTimeStuff (basePath, seriesName, record, introEnd) {
   try {
-    logger.debug(`Getting time stuff for ${id}`);
+    logger.debug(`Getting time stuff for ${record.id}`);
 
-    const runTime = await getRunTime(basePath, seriesName, id);
+    const runTime = await getRunTime(basePath, seriesName, record);
 
     return {
       runTime,
@@ -113,7 +126,7 @@ async function getTimeStuff (basePath, seriesName, id, introEnd) {
     };
   }
   catch (error) {
-    logger.error(`Failed to get time stuff for ${id}`);
+    logger.error(`Failed to get time stuff for ${record.id}`);
     throw error;
   }
 }
