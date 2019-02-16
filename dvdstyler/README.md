@@ -19,6 +19,25 @@ This is still a work in progress.  I plan on using a source dvdstyler template a
 * HDD: ???
 * Hardware Virtualization Enabled
 
+## Use
+
+### Install dvdstyler
+
+* (https://www.dvdstyler.org/en/downloads)[https://www.dvdstyler.org/en/downloads]
+* (http://ubuntuhandbook.org/index.php/2016/07/dvdstyler-3-0-ubuntu-16-04-via-ppa/)[http://ubuntuhandbook.org/index.php/2016/07/dvdstyler-3-0-ubuntu-16-04-via-ppa/]
+* (https://launchpad.net/~ubuntuhandbook1/+archive/ubuntu/dvdstyler/)[https://launchpad.net/~ubuntuhandbook1/+archive/ubuntu/dvdstyler/]
+* `sudo add-apt-repository ppa:ubuntuhandbook1/dvdstyler`
+* `sudo apt update`
+* `sudo apt install dvdstyler`
+
+### `yarn run generate [filename]`
+
+Running this will generate as many dvdstyler files are are passed in via the config that is exported from the file.  Each of those templates will be opened in dvdstyler.  From these open dvdstyler windows, you can confirm that everything looks good.  When you're ready, use the dvdstyler GUI to burn the iso.
+
+### `yarn run generateCatalog`
+
+Running this will generate the Master Spreadsheet used to represent the current state of the library to clients.
+
 
 ## Development
 
