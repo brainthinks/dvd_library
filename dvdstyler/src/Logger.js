@@ -32,7 +32,8 @@ module.exports = class Logger {
 
   // For development
   debug (message) {
-    const preparedMessage = this.prepareMessage('DEBUG', message);
+    const type = 'DEBUG';
+    const preparedMessage = this.prepareMessage(type, message);
 
     this._debug(preparedMessage);
 
@@ -41,7 +42,8 @@ module.exports = class Logger {
 
   // For system access logging
   info (message) {
-    const preparedMessage = this.prepareMessage('INFO', message);
+    const type = 'INFO';
+    const preparedMessage = this.prepareMessage(type, message);
 
     this._debug(preparedMessage);
     console.log(preparedMessage);
@@ -55,10 +57,11 @@ module.exports = class Logger {
       message = new Error(message);
     }
 
-    const preparedMessage = this.prepareMessage('ERROR', message.toString());
+    const type = 'ERROR';
+    const preparedMessage = this.prepareMessage(type, message.toString());
 
     this._debug(preparedMessage);
-    console.error(preparedMessage);
+    console.error(type, message);
 
     // return the Error instance
     return message;

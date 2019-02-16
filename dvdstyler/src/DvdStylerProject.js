@@ -10,85 +10,7 @@ const MainMenu = require('./menus/mainMenu/');
 const LanguageOptionsMenu = require('./menus/languageOptionsMenu/');
 const Titleset = require('./titleset/Titleset');
 
-/**
- * Use async/await or Promises with asynchronous functions that require the use
- * of callbacks.
- *
- * There are still many node functions that are asynchronous but use callbacks
- * rather than promises.  There are probably other libraries that require the
- * caller to use callbacks rather than promises.
- *
- * This function will return a new function that returns a promise.  It returns
- * a function rather than directly returning the promise to give you more
- * freedom regarding how and when you want to execute the asynchronous function.
- *
- * e.g.
- *
- * ```javascript
- * const fs = require('fs');
- * const { asPromise } = require('brain-utils');
- *
- * await asPromise(fs.mkdir)('/path/to/dir');
- * ```
- *
- * When the promise resolves, it resolves with an array containing all of the
- * values that were sent to the callback, with the exception of the first
- * callback argument, which I assume to be the error.  This is configurable.
- *
- * e.g.
- *
- * ```javascript
- * const fs = require('fs');
- * const { asPromise } = require('brain-utils');
- *
- * const [ data ] = await asPromise(fs.readFile)('/path/to/file');
- * const [ error, data ] = await asPromise(fs.readFile, { resolveWithError: true })('/path/to/file');
- * ```
- *
- * @param  {Function} asyncFunction
- *   The function that takes a callback
- *
- * @param  {[Object]} options
- *   * context - if passed, the asyncFunction will be `call`'d with this as its context
- *   * resolveWithError - if `true`, the resolved value will contain the error argument from the callback
- *
- * @return {Function}
- *   A function that will return a Promise.  The returned function should be
- *   executed with the arguments that you would normally have passed the
- *   `asyncFunction`, except for the callback.
- */
-function asPromise (asyncFunction, {
-  context, resolveWithError,
-} = {}) {
-  if (!asyncFunction || typeof asyncFunction !== 'function') {
-    throw new Error('asPromise needs a function.');
-  }
-
-  return (...args) => new Promise((resolve, reject) => {
-    function callback (error, ...results) {
-      if (error) {
-        return reject(error);
-      }
-
-      if (resolveWithError) {
-        return resolve([
-          error,
-          ...results,
-        ]);
-      }
-
-      resolve(results);
-    }
-
-    if (context) {
-      return asyncFunction.call(
-        context, ...args, callback
-      );
-    }
-
-    asyncFunction(...args, callback);
-  });
-}
+const utils = require('./utils/');
 
 module.exports = class DvdStylerProject {
   static factory (config) {
@@ -96,8 +18,8 @@ module.exports = class DvdStylerProject {
   }
 
   static async generateISO (pathToXml, pathToIso) {
-    await asPromise(child_process.exec)(`mkdir -p "${path.dirname(pathToFile)}"`);
-    await asPromise(fs.writeFile)(pathToFile, xml);
+    await utils.asPromise(child_process.exec)(`mkdir -p "${path.dirname(pathToFile)}"`);
+    await utils.asPromise(fs.writeFile)(pathToFile, xml);
   }
 
   constructor ({
@@ -242,11 +164,11 @@ module.exports = class DvdStylerProject {
       // how to do this properly with xml2js
       .replace(/&lt;tbreak\/&gt;/gi, global.NEWLINE);
 
-    await asPromise(child_process.exec)(`mkdir -p "${path.dirname(target)}"`);
-    await asPromise(fs.writeFile)(target, xml);
+    await utils.asPromise(child_process.exec)(`mkdir -p "${path.dirname(target)}"`);
+    await utils.asPromise(fs.writeFile)(target, xml);
   }
 
   async prepareIsoDirectory (pathToIso) {
-    await asPromise(child_process.exec)(`mkdir -p "${path.dirname(pathToIso)}"`);
+    await utils.asPromise(child_process.exec)(`mkdir -p "${path.dirname(pathToIso)}"`);
   }
 };
