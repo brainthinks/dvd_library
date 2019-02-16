@@ -1,26 +1,31 @@
 #!/usr/bin/env node
+
 'use strict';
 
-const debug = require('debug')('dvdstyler:scripts:generateCatalog');
 const path = require('path');
 const XLSX = require('xlsx');
 
-const configs = require('../configs/config.all');
-const library = require('../configs/')(configs);
+const Logger = require('../src/Logger');
+const Configs = require('../configs/');
+
+const logger = Logger.factory('scripts:generateCatalog');
 
 async function main () {
-  const workbook = XLSX.utils.book_new();
+
+  const configs = await Configs();
+  const filepath = path.join(__dirname, '..', 'build', configs.catalog.fileName);
+  logger.info(`Generating catalog at "${filepath}"`);
 
   const rows = [];
 
-  for (let i = 0; i < library.discs.length; i++) {
-    const disc = library.discs[i];
+  logger.debug(`Processing ${configs.discs.length} discs`);
+  for (let i = 0; i < configs.discs.length; i++) {
+    const disc = configs.discs[i];
 
-    for (let j = 0; j < disc.videos.length; j++) {
-      const video = disc.videos[j];
-      const id = video.id;
+    for (let id in disc.videos) {
+      const video = disc.videos[id];
 
-      debug(`Processing ${id}`);
+      logger.debug(`Processing ${id}`);
 
       rows.push({
         'Code': id,
@@ -36,20 +41,22 @@ async function main () {
     }
   }
 
+  const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.json_to_sheet(rows);
 
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Catalog');
+  XLSX.writeFile(workbook, filepath, { type: 'file' });
 
-  XLSX.writeFile(workbook, path.join(__dirname, '..', 'build', library.catalog.fileName), { type: 'file' });
+  return filepath;
 }
 
 main()
-  .then(() => {
-    console.log('SUCCESS');
+  .then((filepath) => {
+    logger.info(`Successfully generated catalog at "${filepath}"`);
     process.exit();
   })
   .catch((error) => {
-    console.error('FAILURE');
-    console.error(error);
+    logger.error('Failed to generate catalog');
+    logger.error(error);
     process.exit(1);
   });
