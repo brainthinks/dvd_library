@@ -7,9 +7,6 @@ VERSION="$(getNodePackageVersion)"
 
 TARGET_DIR="../configs/"
 DATE=$($(echo date +'%Y_%m_%d_%s'))
-
-# @todo - this version may not indicate the actual version of the application
-# it was used with, such as when running a db restore
 FILE_NAME="${APPLICATION_NAME}_${VERSION}_${DATE}"
 
 function getParameters () {

@@ -5,6 +5,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
+    "backup-config": "./scripts/backup_config.sh",
     "generate": "DEBUG=* ./src/index.js",
     "generateCatalog": "DEBUG=* ./scripts/generateCatalog.js",
     "lint": "./scripts/lint.sh",
@@ -19,7 +20,7 @@
     "url": "git+https://github.com/brainthinks/dvd_library.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/brainthinks/dvd_library/issues"
   },

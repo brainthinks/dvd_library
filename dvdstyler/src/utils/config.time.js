@@ -77,9 +77,13 @@ function generateChapters(runTime, introEnd) {
     const [
       hours,
       minutes,
+      seconds_frames,
+    ] = runTime.split(':');
+
+    const [
       seconds,
       frames,
-    ] = runTime.split(':');
+    ] = seconds_frames.split('.');
 
     const chapters = [];
 
@@ -113,7 +117,7 @@ function generateChapters(runTime, introEnd) {
   }
 }
 
-async function getTimeStuff (basePath, seriesName, record, introEnd) {
+async function getTimeStuff (basePath, seriesName, record) {
   try {
     logger.debug(`Getting time stuff for ${record.id}`);
 
@@ -122,7 +126,7 @@ async function getTimeStuff (basePath, seriesName, record, introEnd) {
     return {
       runTime,
       approximateRunTime: getApproximateRunTime(runTime),
-      chapters: generateChapters(runTime, introEnd),
+      chapters: generateChapters(runTime, record.introEnd),
     };
   }
   catch (error) {

@@ -11,7 +11,6 @@ const Configs = require('../configs/');
 const logger = Logger.factory('scripts:generateCatalog');
 
 async function main () {
-
   const configs = await Configs();
   const filepath = path.join(__dirname, '..', 'build', configs.catalog.fileName);
   logger.info(`Generating catalog at "${filepath}"`);
@@ -30,6 +29,7 @@ async function main () {
       rows.push({
         'Code': id,
         'Is Clone Of': video.parentId || '',
+        'Disc': disc.discId,
         'Title': video.title,
         'Year': video.productionYear || '',
         'Run Time': video.runTime,

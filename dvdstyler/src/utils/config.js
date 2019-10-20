@@ -43,6 +43,12 @@ async function exportById(basePath, seriesName, records) {
           ...timeStuff,
           category: seriesName,
         };
+
+        if (record.chapters) {
+          // CU002 doesn't "end" properly, which results in an invalid last
+          // chapter.  Therefore, chapters must be able to be overridden
+          recordsById[id].chapters = record.chapters;
+        }
       }
     }
 
