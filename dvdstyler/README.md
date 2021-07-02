@@ -34,7 +34,7 @@ This is still a work in progress.  I plan on using a source dvdstyler template a
 
 Backup the configuration files.  Useful for representing the state of a particular project or iso.
 
-### `yarn run generate [filename]`
+### `yarn run generate [/path/to/order_filename.js]`
 
 Running this will generate as many dvdstyler files are are passed in via the config that is exported from the file.  Each of those templates will be opened in dvdstyler.  From these open dvdstyler windows, you can confirm that everything looks good.  When you're ready, use the dvdstyler GUI to write the iso file.
 
@@ -61,13 +61,13 @@ Running this will generate the Master Spreadsheet used to represent the current 
 1. repeat the steps above for all updated `series`
 1. `yarn run generateCatalog`
 1. open the new catalog in `./build`, adjust the column widths, and save it (also, compare the exact times from the last catalog)
-1. update the order form in google docs with the new details from
+1. update the order form in google docs with the new details
 1. navigate to the orders directory in Dropbox
 1. copy and paste the most recent folder, rename it to have the correct date, with a client name of `PACKAGE`
-1. delete everything except `case_insert`, `disk_face`, and `order.js`
+1. delete everything except `case_insert`, `disc_face`, and `order.js`
 1. `yarn run generate [path to order config file in dropbox]`
 1. ensure everything looks correct
-1. update any times in the catalog
+1. confirm and update any intro times in the config
 1. update the case insert and disk face images
 1. update the order form
 1. update the invoice template
@@ -77,7 +77,7 @@ Running this will generate the Master Spreadsheet used to represent the current 
 
 1. navigate to the orders directory in Dropbox
 1. copy and paste the most recent folder, rename it to have the correct date
-1. delete everything except `case_insert`, `disk_face`, and `order.js`
+1. delete everything except `case_insert`, `disc_face`, and `order.js`
 1. modify `order.js` to meet the needs of the new order
 1. `yarn run generate [path to order config file in dropbox]`
 1. generate the isos from all open dvdstyler instances

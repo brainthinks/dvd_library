@@ -1,176 +1,190 @@
 'use strict';
 
+const { access } = require('fs/promises');
 const fs = require('fs');
 
 const Logger = require('../Logger');
 
-const logger = Logger.factory('utils:config:paths');
+const logger = Logger.factory('utils:config:titles');
 
-function getEnglishAudioFilePath(basePath, seriesName, record, isParent = false) {
-  return new Promise((resolve, reject) => {
-    if (!seriesName) {
-      return reject(logger.error('"seriesName" is required'));
-    }
-    if (!record) {
-      return reject(logger.error('"record" is required'));
-    }
-    if (!record.id) {
-      return reject(logger.error('"record.id" is required'));
-    }
+async function getEnglishAudioFilePath (basePath, record) {
+  if (!basePath) {
+    throw logger.error('"basePath" is required');
+  }
+  if (!record) {
+    throw logger.error('"record" is required');
+  }
+  if (!record.id) {
+    throw logger.error('"record.id" is required');
+  }
 
-    logger.debug(`Getting English audio file path for ${record.id}`);
+  logger.debug(`Getting english audio file path for ${record.id}`);
 
-    const filepath = `${basePath}/${seriesName}/raw_audio/${record.id}.flac`;
+  const filepath = `${basePath}/${record.seriesName}/raw_audio/${record.id}.flac`;
+
+  try {
     logger.debug(`Looking for file "${filepath}"`);
 
-    fs.access(filepath, fs.constants.F_OK, (error) => {
-      if (error) {
-        if (!isParent && record.parentId) {
-          logger.info(`Could not find English audio file for ${record.id}`);
-          return getEnglishAudioFilePath(basePath, record.parentCategory, { id: record.parentId }, true)
-            .then(resolve)
-            .catch(reject);
-        }
+    await access(filepath, fs.constants.F_OK);
 
-        // reject here, because we cannot continue without the English
-        // audio track
-        logger.error(`Error while trying to find English audio file "${filepath}"`);
-        return reject(error);
-      }
+    return filepath;
+  }
+  catch (error) {
+    logger.warn(`Unable to find "${filepath}"`);
+  }
 
-      resolve(filepath);
+  // If the record is a clone, try to find its parent
+  if (record.parentId) {
+    return getEnglishAudioFilePath(basePath, {
+      id: record.parentId,
+      seriesName: record.parentSeriesName,
     });
-  });
+  }
+
+  throw logger.error(`Unable to find english audio file for ${record.id}`);
 }
 
-function getSpanishAudioFilePath(basePath, seriesName, record, isParent = false) {
-  return new Promise((resolve, reject) => {
-    if (!seriesName) {
-      return reject(logger.error('"seriesName" is required'));
-    }
-    if (!record) {
-      return reject(logger.error('"record" is required'));
-    }
-    if (!record.id) {
-      return reject(logger.error('"record.id" is required'));
-    }
+async function getSpanishAudioFilePath (basePath, record) {
+  if (!basePath) {
+    throw logger.error('"basePath" is required');
+  }
+  if (!record) {
+    throw logger.error('"record" is required');
+  }
+  if (!record.id) {
+    throw logger.error('"record.id" is required');
+  }
 
-    logger.debug(`Getting Spanish audio file path for ${record.id}`);
+  logger.debug(`Getting spanish audio file path for ${record.id}`);
 
-    const filepath = `${basePath}/${seriesName}/raw_audio/${record.id}S.flac`;
+  const filepath = `${basePath}/${record.seriesName}/raw_audio/${record.id}S.flac`;
+
+  try {
     logger.debug(`Looking for file "${filepath}"`);
 
-    fs.access(filepath, fs.constants.F_OK, (error) => {
-      // @todo - it would be better to check the error type, because doing
-      // this when a file doesn't exist is fine, but what if the error was
-      // not thrown because the file didn't exist?  Like there was some
-      // deeper system error?
-      if (error) {
-        if (!isParent && record.parentId) {
-          logger.info(`Could not find Spanish audio file for ${record.id}`);
-          return getSpanishAudioFilePath(basePath, record.parentCategory, { id: record.parentId }, true)
-            .then(resolve)
-            .catch(reject);
-        }
+    await access(filepath, fs.constants.F_OK);
 
-        // No need to reject here, it just means we don't have a Spanish
-        // track
-        return resolve(null);
-      }
+    return filepath;
+  }
+  catch (error) {
+    logger.warn(`Unable to find "${filepath}"`);
+  }
 
-      resolve(filepath);
+  // If the record is a clone, try to find its parent
+  if (record.parentId) {
+    return getSpanishAudioFilePath(basePath, {
+      id: record.parentId,
+      seriesName: record.parentSeriesName,
     });
-  });
+  }
+
+  throw logger.error(`Unable to find spanish audio file for ${record.id}`);
 }
 
-// @todo - this function makes some assumptions...
-function getVideoFilePath(basePath, seriesName, record, type = 'mkv', isParent = false) {
-  return new Promise((resolve, reject) => {
-    if (!seriesName) {
-      return reject(logger.error('"seriesName" is required'));
-    }
-    if (!record) {
-      return reject(logger.error('"record" is required'));
-    }
-    if (!record.id) {
-      return reject(logger.error('"record.id" is required'));
-    }
-    if (!type) {
-      return reject(logger.error('"type" is required'));
-    }
-    if (!['mkv', 'mpeg'].includes(type)) {
-      return reject(logger.error(`Unable to process video type "${type}".  type must be either "mkv" or "mpeg"`));
-    }
+async function getVideoFilePath (basePath, record) {
+  if (!basePath) {
+    throw logger.error('"basePath" is required');
+  }
+  if (!record) {
+    throw logger.error('"record" is required');
+  }
+  if (!record.id) {
+    throw logger.error('"record.id" is required');
+  }
 
-    logger.debug(`Getting video file path of type "${type}" for ${record.id}`);
+  const mkvFilepath = `${basePath}/${record.seriesName}/raw_video/${record.id}.mkv`;
+  const mpegFilepath = `${basePath}/${record.seriesName}/raw_video/${record.id}.mpeg`;
 
-    const filepath = `${basePath}/${seriesName}/raw_video/${record.id}.${type}`;
-    logger.debug(`Looking for file "${filepath}"`);
+  try {
+    logger.debug(`Looking for file "${mkvFilepath}"`);
 
-    fs.access(filepath, fs.constants.F_OK, (error) => {
-      if (!error) {
-        return resolve(filepath);
-      }
+    await access(mkvFilepath, fs.constants.F_OK);
 
-      if (!isParent) {
-        // If we didn't find the mkv, look for the mpeg
-        if (type === 'mkv') {
-          logger.info(`Could not find "mkv" for ${record.id}`);
-          return getVideoFilePath(basePath, seriesName, record, 'mpeg')
-            .then(resolve)
-            .catch(reject);
-        }
+    return mkvFilepath;
+  }
+  catch (error) {
+    logger.warn(`Unable to find "${mkvFilepath}"`);
+  }
 
-        // Assuming we didn't find the mkv OR the mpeg, try to find it on the parent
-        logger.info(`Could not find "mpeg" for ${record.id}`);
+  try {
+    logger.debug(`Looking for file "${mpegFilepath}"`);
 
-        if (record.parentId) {
-          return getVideoFilePath(basePath, record.parentCategory, { id: record.parentId }, 'mkv', true)
-            .then(resolve)
-            .catch(reject);
-        }
+    await access(mpegFilepath, fs.constants.F_OK);
 
-        return reject(error);
-      }
+    return mpegFilepath;
+  }
+  catch (error) {
+    logger.warn(`Unable to find "${mpegFilepath}"`);
+  }
 
-      // If we didn't find the mkv on the parent, look for the mpeg on the parent
-      if (type === 'mkv') {
-        logger.info(`Could not find "mkv" for parent ${record.id}`);
-        return getVideoFilePath(basePath, seriesName, record, 'mpeg', true)
-          .then(resolve)
-          .catch(reject);
-      }
-
-      // reject here, because we cannot continue without the video track
-      logger.info(`Could not find "mpeg" for parent ${record.id}`);
-      return reject(error);
+  // If the record is a clone, try to find its parent
+  if (record.parentId) {
+    return getVideoFilePath(basePath, {
+      id: record.parentId,
+      seriesName: record.parentSeriesName,
     });
-  });
+  }
+
+  throw logger.error(`Unable to find video file for ${record.id}`);
 }
 
-async function getPaths(basePath, seriesName, record) {
+async function getPaths (basePath, record) {
   try {
     if (!basePath) {
-      return reject(logger.error('"basePath" is required'));
-    }
-    if (!seriesName) {
-      return reject(logger.error('"seriesName" is required'));
+      throw logger.error('"basePath" is required');
     }
     if (!record) {
-      return reject(logger.error('"record" is required'));
+      throw logger.error('"record" is required');
     }
 
-    logger.debug(`Getting paths for ${record.id}`);
+    const englishAudio = await getEnglishAudioFilePath(basePath, record);
 
-    return {
+    let spanishAudio;
+
+    try {
+      spanishAudio = await getSpanishAudioFilePath(basePath, record);
+    }
+    catch (error) {
+      spanishAudio = englishAudio;
+    }
+
+    const englishVideo = await getVideoFilePath(basePath, record);
+
+    let spanishVideo;
+
+    if (record.useSpanishAltVideoTrack) {
+      try {
+        // Append "S" to the id
+        const spanishRecord = {
+          ...record,
+          id: `${record.id}S`,
+        };
+
+        // Append "S" to the parent id
+        if (spanishRecord.parentId) {
+          spanishRecord.parentId = `${spanishRecord.parentId}S`;
+          console.log(spanishRecord)
+        }
+
+        spanishVideo = await getVideoFilePath(basePath, spanishRecord);
+      }
+      catch (error) {
+        throw logger.error(`Could not find spanish video file for ${record.id}`);
+      }
+    }
+
+    const paths = {
       audio: {
-        english: await getEnglishAudioFilePath(basePath, seriesName, record),
-        spanish: await getSpanishAudioFilePath(basePath, seriesName, record),
+        english: englishAudio,
+        spanish: spanishAudio,
       },
       video: {
-        sd: await getVideoFilePath(basePath, seriesName, record),
+        english: englishVideo,
+        spanish: spanishVideo,
       },
     };
+
+    return paths;
   }
   catch (error) {
     logger.error(`Failed to get paths for ${record.id}`);
@@ -179,8 +193,6 @@ async function getPaths(basePath, seriesName, record) {
 }
 
 module.exports = {
-  getEnglishAudioFilePath,
-  getSpanishAudioFilePath,
-  getVideoFilePath,
   getPaths,
-}
+  getVideoFilePath,
+};

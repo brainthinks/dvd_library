@@ -51,6 +51,16 @@ module.exports = class Logger {
     return this;
   }
 
+  warn (message) {
+    const type = 'WARN';
+    const preparedMessage = this.prepareMessage(type, message);
+
+    this._debug(preparedMessage);
+    console.warn(preparedMessage);
+
+    return this;
+  }
+
   // For system error logging
   error (message) {
     if (typeof message === 'string') {

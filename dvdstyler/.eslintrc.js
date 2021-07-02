@@ -4,7 +4,7 @@ const rules = {
   'max-len': [
     'error',
     {
-      code: 80,
+      code: 120,
       ignoreTrailingComments: true,
       ignoreUrls: true,
       ignoreStrings: true,
@@ -27,10 +27,15 @@ const rules = {
   'object-curly-newline': [
     'error',
     {
-      minProperties: 1,
+      minProperties: 3,
     },
   ],
-  'object-property-newline': 'error',
+  'object-property-newline': [
+    'error',
+    {
+      minProperties: 3,
+    },
+  ],
   'object-curly-spacing': [
     'error',
     'always',
@@ -42,12 +47,14 @@ const rules = {
   'array-bracket-newline': [
     'error',
     {
-      minItems: 1,
+      minItems: 3,
     },
   ],
   'array-element-newline': [
     'error',
-    'always',
+    {
+      minItems: 3,
+    },
   ],
   'comma-dangle': [
     'error',
@@ -94,12 +101,12 @@ const rules = {
   ],
   // @todo - waiting on this rule:
   // @see - https://github.com/eslint/eslint/issues/10323
-  'function-paren-newline': [
-    'error',
-    {
-      'minItems': 3,
-    },
-  ],
+  // 'function-paren-newline': [
+  //   'error',
+  //   {
+  //     'minItems': 3,
+  //   },
+  // ],
 };
 
 module.exports = {

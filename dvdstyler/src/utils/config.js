@@ -6,42 +6,58 @@ const { getTimeStuff } = require('./config.time');
 
 const logger = Logger.factory('utils:config');
 
-function clone (parent, cloneProperties) {
+function clone (record, properties) {
   try {
-    logger.debug(`About to clone ${parent.id} to be used as ${cloneProperties.id}`);
+    if (!properties?.id) {
+      throw logger.error('"properties.id" is required')
+    }
+
+    logger.debug(`About to clone ${record.id} to be used as ${properties.id}`);
 
     return {
-      parentId: parent.id,
-      parentCategory: parent.category,
-      ...parent,
-      ...cloneProperties,
+      isClone: true,
+      parentId: record.id,
+      parentSeriesName: record.seriesName,
+      ...record,
+      ...properties,
     };
   }
   catch (error) {
-    logger.error(`Failied to clone ${parent.id}`);
+    logger.error(`Failied to clone ${record.id}`);
     throw error;
   }
 }
 
-async function exportById(basePath, seriesName, records) {
+async function exportById (basePath, records) {
+  const seriesName = records[0].seriesName;
+
   try {
     logger.debug(`Processing series "${seriesName}"`);
+
     const recordsById = {};
 
     for (let i = 0; i < records.length; i++) {
       const record = records[i];
+
+      if (!record.id) {
+        throw logger.error('record does not have an id');
+      }
+
+      if (!record.seriesName) {
+        throw logger.error('record does not have a series name');
+      }
+
       const id = record.id;
       logger.debug(`processing record "${id}"`);
 
-      const paths = await getPaths(basePath, seriesName, record);
-      const timeStuff = await getTimeStuff(basePath, seriesName, record);
+      const paths = await getPaths(basePath, record);
+      const timeStuff = await getTimeStuff(basePath, record);
 
       if (record.enabled) {
         recordsById[id] = {
           ...record,
           ...paths,
           ...timeStuff,
-          category: seriesName,
         };
 
         if (record.chapters) {

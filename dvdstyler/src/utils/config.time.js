@@ -2,18 +2,15 @@
 
 const { exec } = require('child_process');
 
-const pathUtils = require('./config.paths');
+const { getVideoFilePath } = require('./config.paths');
 const Logger = require('../Logger');
 
 const logger = Logger.factory('utils:config:time');
 
-async function getRunTime(basePath, seriesName, record = {}) {
+async function getRunTime(basePath, record) {
   try {
     if (!basePath) {
       throw logger.error('"basePath" is required');
-    }
-    if (!seriesName) {
-      throw logger.error('"seriesName" is required');
     }
     if (!record) {
       throw logger.error('"record" is required');
@@ -24,7 +21,7 @@ async function getRunTime(basePath, seriesName, record = {}) {
 
     logger.debug(`Getting run time of "${record.id}"`);
 
-    const path = await pathUtils.getVideoFilePath(basePath, seriesName, record);
+    const path = await getVideoFilePath(basePath, record);
     const command = `ffmpeg -i "${path}" 2>&1 | grep -i duration`;
 
     logger.debug(`Using the following ffmpeg command to get run time of "${record.id}"`);
@@ -117,11 +114,11 @@ function generateChapters(runTime, introEnd) {
   }
 }
 
-async function getTimeStuff (basePath, seriesName, record) {
+async function getTimeStuff (basePath, record) {
   try {
     logger.debug(`Getting time stuff for ${record.id}`);
 
-    const runTime = await getRunTime(basePath, seriesName, record);
+    const runTime = await getRunTime(basePath, record);
 
     return {
       runTime,
