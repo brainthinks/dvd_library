@@ -95,7 +95,7 @@ module.exports = class Subtitle extends MenuAssets {
                 'xml:space': 'preserve',
                 style: Style.factory({
                   'dominant-baseline': 'middle',
-                  'font-family': 'Standard Symbols L',
+                  'font-family': 'Sans',
                   'font-size': 24,
                   'font-style': 'normal',
                   'font-weight': 'bold',

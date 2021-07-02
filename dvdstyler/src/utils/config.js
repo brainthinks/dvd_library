@@ -1,8 +1,12 @@
 'use strict';
 
 const Logger = require('../Logger');
-const { getPaths } = require('./config.paths');
-const { getTimeStuff } = require('./config.time');
+const {
+  getPaths,
+} = require('./config.paths');
+const {
+  getTimeStuff,
+} = require('./config.time');
 
 const logger = Logger.factory('utils:config');
 
@@ -23,7 +27,9 @@ function clone (parent, cloneProperties) {
   }
 }
 
-async function exportById(basePath, seriesName, records) {
+async function exportById (basePath, records) {
+  const seriesName = records[0].seriesName;
+
   try {
     logger.debug(`Processing series "${seriesName}"`);
     const recordsById = {};
@@ -33,8 +39,12 @@ async function exportById(basePath, seriesName, records) {
       const id = record.id;
       logger.debug(`processing record "${id}"`);
 
-      const paths = await getPaths(basePath, seriesName, record);
-      const timeStuff = await getTimeStuff(basePath, seriesName, record);
+      const paths = await getPaths(
+        basePath, seriesName, record
+      );
+      const timeStuff = await getTimeStuff(
+        basePath, seriesName, record
+      );
 
       if (record.enabled) {
         recordsById[id] = {
